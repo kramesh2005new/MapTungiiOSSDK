@@ -1,0 +1,1098 @@
+{
+    "animationFrames": [{
+            "name": "Ripple_Building",
+            "imgName": "Ripple_Board",
+            "imgxPosition": 1526,
+            "imgyPosition": 372,
+            "imgheight": 58,
+            "imgwidth": 55
+        },
+        {
+            "name": "Amara_Building",
+            "imgName": "AmaraBoard",
+            "imgxPosition": 1724,
+            "imgyPosition": 420,
+            "imgheight": 73,
+            "imgwidth": 77
+        },
+        {
+            "name": "Cafe_Building",
+            "imgName": "Cafe_Board",
+            "imgxPosition": 1038,
+            "imgyPosition": 294,
+            "imgheight": 67,
+            "imgwidth": 123
+        },
+        {
+            "name": "Spa_Building",
+            "imgName": "Spa_Board",
+            "imgxPosition": 1506,
+            "imgyPosition": 203,
+            "imgheight": 32,
+            "imgwidth": 38
+        },
+        {
+            "name": "Glass_House",
+            "imgName": "Glass_house",
+            "imgxPosition": 626,
+            "imgyPosition": 695,
+            "imgheight": 103,
+            "imgwidth": 131
+        }
+    ],
+    "title": [{
+            "name": "laggarfalcon",
+            "xPosition": 125,
+            "yPosition": 445,
+            "width": 195,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "kestrel",
+            "xPosition": 270,
+            "yPosition": 605,
+            "width": 114,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "orientalhoneybuzzard",
+            "xPosition": 0,
+            "yPosition": 685,
+            "width": 200,
+            "height": 58,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "blackkite",
+            "xPosition": 20,
+            "yPosition": 840,
+            "width": 130,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "besrasparrowhawk",
+            "xPosition": 256,
+            "yPosition": 874,
+            "width": 266,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "tungifort",
+            "xPosition": 668,
+            "yPosition": 956,
+            "width": 157,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "nursery",
+            "xPosition": 625,
+            "yPosition": 660,
+            "width": 125,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "rosegarden",
+            "xPosition": 694,
+            "yPosition": 387,
+            "width": 161,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "theavenue",
+            "xPosition": 722,
+            "yPosition": 539,
+            "width": 160,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "parking",
+            "xPosition": 849,
+            "yPosition": 718,
+            "width": 131,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "outdooractivityarea",
+            "xPosition": 1064,
+            "yPosition": 610,
+            "width": 270,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "entry",
+            "xPosition": 1241,
+            "yPosition": 896,
+            "width": 108,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "lawn",
+            "xPosition": 1300,
+            "yPosition": 732,
+            "width": 121,
+            "height": 42,
+            "id": 6,
+            "value": 1
+        },
+        {
+            "name": "lobby",
+            "xPosition": 1538,
+            "yPosition": 731,
+            "width": 131,
+            "height": 42,
+            "id": 7,
+            "value": 1
+        },
+        {
+            "name": "happyhub",
+            "xPosition": 1320,
+            "yPosition": 366,
+            "width": 198,
+            "height": 42,
+            "id": 4,
+            "value": 1
+        },
+        {
+            "name": "banquet",
+            "xPosition": 1620,
+            "yPosition": 510,
+            "width": 156,
+            "height": 42,
+            "id": 8,
+            "value": 1
+        },
+        {
+            "name": "pool",
+            "xPosition": 1191,
+            "yPosition": 429,
+            "width": 109,
+            "height": 40,
+            "id": 5,
+            "value": 1
+        },
+        {
+            "name": "butterflygarden",
+            "xPosition": 1023,
+            "yPosition": 359,
+            "width": 123,
+            "height": 68,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "cafelaughingdove",
+            "xPosition": 880,
+            "yPosition": 250,
+            "width": 300,
+            "height": 42,
+            "id": 9,
+            "value": 1
+        },
+        {
+            "name": "kid’spark",
+            "xPosition": 1320,
+            "yPosition": 249,
+            "width": 131,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "infinitypool",
+            "xPosition": 1200,
+            "yPosition": 215,
+            "width": 98,
+            "height": 69,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "amararestaurant",
+            "xPosition": 1680,
+            "yPosition": 380,
+            "width": 131,
+            "height": 43,
+            "id": 2,
+            "value": 1
+        },
+        {
+            "name": "rilpplesrestaurant",
+            "xPosition": 1553,
+            "yPosition": 320,
+            "width": 144,
+            "height": 43,
+            "id": 3,
+            "value": 1
+        },
+        {
+            "name": "beautysalon",
+            "xPosition": 1310,
+            "yPosition": 155,
+            "width": 216,
+            "height": 43,
+            "id": 11,
+            "value": 1
+        },
+        {
+            "name": "gym",
+            "xPosition": 1650,
+            "yPosition": 190,
+            "width": 105,
+            "height": 42,
+            "id": 10,
+            "value": 1
+        },
+        {
+            "name": "spa",
+            "xPosition": 1540,
+            "yPosition": 145,
+            "width": 100,
+            "height": 43,
+            "id": 1,
+            "value": 1
+        },
+        {
+            "name": "lakepavna",
+            "xPosition": 1372,
+            "yPosition": 20,
+            "width": 165,
+            "height": 43,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "orientalturtledove",
+            "xPosition": 921,
+            "yPosition": 171,
+            "width": 253,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "red-wattledlapwing",
+            "xPosition": 606,
+            "yPosition": 172,
+            "width": 157,
+            "height": 73,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "cattleegret",
+            "xPosition": 494,
+            "yPosition": 88,
+            "width": 185,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "crimson-backedsunbird",
+            "xPosition": 743,
+            "yPosition": 121,
+            "width": 309,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "golden-plover",
+            "xPosition": 575,
+            "yPosition": 0,
+            "width": 195,
+            "height": 42,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "indianheron",
+            "xPosition": 9,
+            "yPosition": 96,
+            "width": 195,
+            "height": 41,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "reeve",
+            "xPosition": 112,
+            "yPosition": 10,
+            "width": 147,
+            "height": 76,
+            "id": 0,
+            "value": 0
+        }
+    ],
+    "pivot": [{
+            "name": "Svaastha Spa",
+            "btnxPosition": 1570,
+            "btnyPosition": 120,
+            "btnheight": 40,
+            "btnwidth": 40,
+            "id": 1,
+            "xPosition": 1570,
+            "yPosition": 120,
+            "width": 40,
+            "height": 40
+        },
+        {
+            "name": "Amara Pan-Asian Restaurant",
+            "btnxPosition": 1740,
+            "btnyPosition": 356,
+            "btnheight": 40,
+            "btnwidth": 40,
+            "id": 2,
+            "xPosition": 1740,
+            "yPosition": 356,
+            "width": 40,
+            "height": 40
+        },
+        {
+            "name": "Ripples Multi-Cuisine Restaurant",
+            "btnxPosition": 1695,
+            "btnyPosition": 275,
+            "btnheight": 40,
+            "btnwidth": 40,
+            "id": 3,
+            "xPosition": 1695,
+            "yPosition": 275,
+            "width": 40,
+            "height": 40
+        },
+        {
+            "name": "#HappyHub",
+            "btnxPosition": 1406,
+            "btnyPosition": 328,
+            "btnheight": 40,
+            "btnwidth": 40,
+            "id": 4,
+            "xPosition": 1406,
+            "yPosition": 328,
+            "width": 40,
+            "height": 40
+        },
+        {
+            "name": "Pool",
+            "btnxPosition": 1240,
+            "btnyPosition": 390,
+            "btnheight": 40,
+            "btnwidth": 40,
+            "id": 5,
+            "xPosition": 1240,
+            "yPosition": 390,
+            "width": 40,
+            "height": 40
+        },
+        {
+            "name": "Lawn",
+            "btnxPosition": 1340,
+            "btnyPosition": 695,
+            "btnheight": 40,
+            "btnwidth": 40,
+            "id": 6,
+            "xPosition": 1340,
+            "yPosition": 695,
+            "width": 40,
+            "height": 40
+        },
+        {
+            "name": "Lobby",
+            "btnxPosition": 1570,
+            "btnyPosition": 693,
+            "btnheight": 40,
+            "btnwidth": 40,
+            "id": 7,
+            "xPosition": 1570,
+            "yPosition": 693,
+            "width": 40,
+            "height": 40
+        },
+        {
+            "name": "Banquet",
+            "btnxPosition": 1681,
+            "btnyPosition": 473,
+            "btnheight": 40,
+            "btnwidth": 40,
+            "id": 8,
+            "xPosition": 1681,
+            "yPosition": 473,
+            "width": 40,
+            "height": 40
+        },
+        {
+            "name": "Cafe Laughing Dove",
+            "btnxPosition": 980,
+            "btnyPosition": 215,
+            "btnheight": 40,
+            "btnwidth": 40,
+            "id": 9,
+            "xPosition": 980,
+            "yPosition": 215,
+            "width": 40,
+            "height": 40
+        },
+        {
+            "name": "Gym",
+            "btnxPosition": 1622,
+            "btnyPosition": 202,
+            "btnheight": 40,
+            "btnwidth": 40,
+            "id": 10,
+            "xPosition": 1622,
+            "yPosition": 202,
+            "width": 40,
+            "height": 40
+        },
+        {
+            "name": "Beauty Salon",
+            "btnxPosition": 1400,
+            "btnyPosition": 153,
+            "btnheight": 40,
+            "btnwidth": 40,
+            "id": 11,
+            "xPosition": 1400,
+            "yPosition": 153,
+            "width": 40,
+            "height": 40
+        }
+    ],
+    "staticAssets": [{
+            "name": "Mom_Kid",
+            "xPosition": 1401,
+            "yPosition": 321,
+            "width": 21,
+            "height": 30
+        },
+        {
+            "name": "Pool_Child",
+            "xPosition": 1206,
+            "yPosition": 512,
+            "width": 17,
+            "height": 14
+        },
+        {
+            "name": "Pool_Child",
+            "xPosition": 1182,
+            "yPosition": 284,
+            "width": 17,
+            "height": 14
+        },
+        {
+            "name": "Pool_Side_Girl",
+            "xPosition": 1237,
+            "yPosition": 497,
+            "width": 16,
+            "height": 26
+        },
+        {
+            "name": "security",
+            "xPosition": 1341,
+            "yPosition": 1035,
+            "width": 36,
+            "height": 36
+        },
+        {
+            "name": "Sitting_Men_Women",
+            "xPosition": 1321,
+            "yPosition": 693,
+            "width": 32,
+            "height": 39
+        },
+        {
+            "name": "Sitting_Women",
+            "xPosition": 1424,
+            "yPosition": 652,
+            "width": 17,
+            "height": 35
+        },
+        {
+            "name": "Standing_Father_Son",
+            "xPosition": 1418,
+            "yPosition": 545,
+            "width": 37,
+            "height": 48
+        },
+        {
+            "name": "Standing_man_1",
+            "xPosition": 745,
+            "yPosition": 476,
+            "width": 26,
+            "height": 75
+        },
+        {
+            "name": "Standing_man_1",
+            "xPosition": 1758,
+            "yPosition": 308,
+            "width": 26,
+            "height": 75
+        },
+        {
+            "name": "Standing_man_1",
+            "xPosition": 1064,
+            "yPosition": 164,
+            "width": 26,
+            "height": 75
+        },
+        {
+            "name": "Standing_Man_2",
+            "xPosition": 1130,
+            "yPosition": 418,
+            "width": 18,
+            "height": 35
+        },
+        {
+            "name": "static_trees",
+            "xPosition": 0,
+            "yPosition": 669,
+            "width": 1796,
+            "height": 411
+        },
+        {
+            "name": "Tree_Branch_Building_Top",
+            "xPosition": 557,
+            "yPosition": 200,
+            "width": 60,
+            "height": 47
+        },
+        {
+            "name": "Bushes_1",
+            "xPosition": 688,
+            "yPosition": 330,
+            "width": 23,
+            "height": 65
+        },
+        {
+            "name": "Mountain",
+            "xPosition": 0,
+            "yPosition": 797,
+            "width": 1192,
+            "height": 284
+        },
+        {
+            "name": "Tree_Bunch_9",
+            "xPosition": 188,
+            "yPosition": 177,
+            "width": 48,
+            "height": 47
+        },
+        {
+            "name": "Tree_Bunch_10",
+            "xPosition": 27,
+            "yPosition": 145,
+            "width": 294,
+            "height": 128
+        }
+    ],
+    "bgeffects": [
+        {
+            "name": "Tree_Bunch_1",
+            "imgName": "Tree_Bunch_1",
+            "xPosition": 0,
+            "yPosition": 282,
+            "width": 1230,
+            "height": 746,
+            "animate": 0
+        },
+        {
+            "name": "Tree_Bunch_2",
+            "imgName": "Tree_Bunch_2",
+            "xPosition": 0,
+            "yPosition": 224,
+            "width": 719,
+            "height": 466,
+            "animate": 0
+        },
+        {
+            "name": "Tree_Bunch_3",
+            "imgName": "Tree_Bunch_3",
+            "xPosition": 532,
+            "yPosition": 0,
+            "width": 443,
+            "height": 270,
+            "animate": 0
+        },
+        {
+            "name": "Tree_Bunch_4",
+            "imgName": "Tree_Bunch_4",
+            "xPosition": 0,
+            "yPosition": 0,
+            "width": 306,
+            "height": 208,
+            "animate": 0
+        },
+        {
+            "name": "Tree_Bunch_6",
+            "imgName": "Tree_Bunch_6",
+            "xPosition": 1624,
+            "yPosition": 202,
+            "width": 142,
+            "height": 107,
+            "animate": 0
+        },
+        {
+            "name": "Butterfly_Garden",
+            "imgName": "Butterfly_Garden",
+            "xPosition": 1033,
+            "yPosition": 390,
+            "width": 118,
+            "height": 87,
+            "animate": 0
+        },
+        {
+            "name": "Boat",
+            "imgName": "Boat",
+            "xPosition": 1836,
+            "yPosition": 90,
+            "width": 52,
+            "height": 32,
+            "animate": 0
+        },
+        {
+            "name": "Flag",
+            "imgName": "Flag",
+            "xPosition": 1264,
+            "yPosition": 342,
+            "width": 202,
+            "height": 156,
+            "animate": 0
+        },
+        {
+            "name": "Gate",
+            "imgName": "Gate",
+            "xPosition": 1282,
+            "yPosition": 924,
+            "width": 102,
+            "height": 122,
+            "animate": 0
+        },
+        {
+            "name": "Tent",
+            "imgName": "Tent",
+            "xPosition": 1354,
+            "yPosition": 438,
+            "width": 51,
+            "height": 56,
+            "animate": 0
+        },
+        {
+            "name": "Camera_Flash",
+            "imgName": "Camera_Flash",
+            "xPosition": 396,
+            "yPosition": 320,
+            "width": 1404,
+            "height": 35,
+            "animate": 0
+        },
+        {
+            "name": "Camera_Flash",
+            "imgName": "Camera_Flash",
+            "xPosition": -94,
+            "yPosition": 798,
+            "width": 1404,
+            "height": 35,
+            "animate": 0
+        },
+        {
+            "name": "Solar_Panel",
+            "imgName": "Solar_Panel",
+            "xPosition": 965,
+            "yPosition": 454,
+            "width": 203,
+            "height": 353,
+            "animate": 0
+        },
+        {
+            "name": "SolarPanel_Lightsweep",
+            "imgName": "SolarPanel_Lightsweep",
+            "xPosition": 965,
+            "yPosition": 454,
+            "width": 200,
+            "height": 340,
+            "animate": 0
+        },
+        {
+            "name": "Steam",
+            "imgName": "Steam",
+            "xPosition": 1627,
+            "yPosition": 376,
+            "width": 8,
+            "height": 117,
+            "animate": 0
+        },
+        {
+            "name": "Steam",
+            "imgName": "Steam",
+            "xPosition": 1810,
+            "yPosition": 334,
+            "width": 8,
+            "height": 117,
+            "animate": 0
+        },
+        {
+            "name": "See_Saw",
+            "imgName": "See_Saw",
+            "xPosition": 1357,
+            "yPosition": 345,
+            "width": 39,
+            "height": 39,
+            "animate": 0
+        },
+        {
+            "name": "Pool_Relaxing_Girl",
+            "imgName": "Pool_Relaxing_Girl",
+            "xPosition": 1256,
+            "yPosition": 370,
+            "width": 28,
+            "height": 24,
+            "animate": 0
+        },
+        {
+            "name": "Mom_Kid_Standing",
+            "imgName": "Mom_Kid_Standing",
+            "xPosition": 1500,
+            "yPosition": 524,
+            "width": 32,
+            "height": 42,
+            "animate": 0
+        },
+        {
+            "name": "Mom_Kid_Standing",
+            "imgName": "Mom_Kid_Standing",
+            "xPosition": 1262,
+            "yPosition": 814,
+            "width": 32,
+            "height": 42,
+            "animate": 0
+        },
+        {
+            "name": "Lake_Wave",
+            "imgName": "Wave",
+            "xPosition": 1354,
+            "yPosition": 60,
+            "width": 204,
+            "height": 167,
+            "animate": 0
+        },
+        {
+            "name": "Lake_Wave",
+            "imgName": "Wave",
+            "xPosition": 1722,
+            "yPosition": 128,
+            "width": 204,
+            "height": 167,
+            "animate": 0
+        },
+        {
+            "name": "Lake_Wave",
+            "imgName": "Wave",
+            "xPosition": 1438,
+            "yPosition": 4,
+            "width": 204,
+            "height": 167,
+            "animate": 0
+        },
+        {
+            "name": "Lake_Wave",
+            "imgName": "Wave",
+            "xPosition": 1062,
+            "yPosition": 0,
+            "width": 204,
+            "height": 167,
+            "animate": 0
+        },
+        {
+            "name": "Fountain",
+            "imgName": "Fountain",
+            "xPosition": 1571,
+            "yPosition": 251,
+            "width": 42,
+            "height": 46,
+            "animate": 0
+        },
+        {
+            "name": "Fountain",
+            "imgName": "Fountain",
+            "xPosition": 1217,
+            "yPosition": 393,
+            "width": 42,
+            "height": 46,
+            "animate": 0
+        },
+        {
+            "name": "Fountain",
+            "imgName": "Fountain",
+            "xPosition": 1344,
+            "yPosition": 834,
+            "width": 42,
+            "height": 46,
+            "animate": 0
+        },
+        {
+            "name": "Pool_Reflect",
+            "imgName": "star",
+            "xPosition": 1205,
+            "yPosition": 281,
+            "width": 14,
+            "height": 12,
+            "animate": 0
+        },
+        {
+            "name": "Pool_Reflect",
+            "imgName": "star",
+            "xPosition": 1216,
+            "yPosition": 500,
+            "width": 14,
+            "height": 12,
+            "animate": 0
+        },
+        {
+            "name": "Pool_Reflect",
+            "imgName": "star",
+            "xPosition": 1190,
+            "yPosition": 514,
+            "width": 14,
+            "height": 12,
+            "animate": 0
+        },
+        {
+            "name": "Lake_Reflect",
+            "imgName": "Star",
+            "xPosition": 1732,
+            "yPosition": 136,
+            "width": 14,
+            "height": 12,
+            "animate": 0
+        },
+        {
+            "name": "Lake_Reflect",
+            "imgName": "Star",
+            "xPosition": 1736,
+            "yPosition": 0,
+            "width": 14,
+            "height": 12,
+            "animate": 0
+        },
+        {
+            "name": "Playground_Child",
+            "imgName": "Playground_Child",
+            "xPosition": 1306,
+            "yPosition": 347,
+            "width": 18,
+            "height": 22,
+            "animate": 0
+        },
+        {
+            "name": "Pool_Girl_1",
+            "imgName": "Pool_Girl_1",
+            "xPosition": 1171,
+            "yPosition": 387,
+            "width": 18,
+            "height": 22,
+            "animate": 1
+        },
+        {
+            "name": "Pool_Girl_2",
+            "imgName": "Pool_Girl_2",
+            "xPosition": 1153,
+            "yPosition": 414,
+            "width": 20,
+            "height": 28,
+            "animate": 1
+        },
+        {
+            "name": "Pool_Girl_3",
+            "imgName": "Pool_Girl_3",
+            "xPosition": 1212,
+            "yPosition": 288,
+            "width": 20,
+            "height": 28,
+            "animate": 1
+        },
+        {
+            "name": "Pool_Girl_4",
+            "imgName": "Pool_Girl_4",
+            "xPosition": 1191,
+            "yPosition": 280,
+            "width": 20,
+            "height": 28,
+            "animate": 1
+        },
+        {
+            "name": "Mom_Kid_Walk 3-4",
+            "imgName": "Mom_Kid_Walk 3-4",
+            "xPosition": 556,
+            "yPosition": 736,
+            "width": 37,
+            "height": 41,
+            "animate": 1
+        },
+        {
+            "name": "Mom_Kid_Walk 3-4",
+            "imgName": "Mom_Kid_Walk 3-4",
+            "xPosition": 1296,
+            "yPosition": 710,
+            "width": 37,
+            "height": 41,
+            "animate": 1
+        },
+        {
+            "name": "Father_Son_Walk 3-4",
+            "imgName": "Father_Son_Walk 3-4",
+            "xPosition": 562,
+            "yPosition": 542,
+            "width": 41,
+            "height": 77,
+            "animate": 1
+        },
+        {
+            "name": "Father_Son_Walk 3-4",
+            "imgName": "Father_Son_Walk 3-4",
+            "xPosition": 1424,
+            "yPosition": 646,
+            "width": 41,
+            "height": 77,
+            "animate": 1
+        },
+        {
+            "name": "Father_Son_Walk 3-4",
+            "imgName": "Father_Son_Walk 3-4",
+            "xPosition": 1004,
+            "yPosition": 158,
+            "width": 41,
+            "height": 77,
+            "animate": 1
+        },
+        {
+            "name": "Bird_White",
+            "imgName": "Bird_White",
+            "xPosition": -1,
+            "yPosition": 264,
+            "width": 30,
+            "height": 31,
+            "animate": 2
+        },
+        {
+            "name": "Bird_White",
+            "imgName": "Bird_White",
+            "xPosition": -19,
+            "yPosition": 290,
+            "width": 30,
+            "height": 31,
+            "animate": 2
+        },
+        {
+            "name": "Bird_White",
+            "imgName": "Bird_White",
+            "xPosition": -27,
+            "yPosition": 258,
+            "width": 30,
+            "height": 31,
+            "animate": 2
+        },
+        {
+            "name": "Bird_Pink",
+            "imgName": "Bird_Pink",
+            "xPosition": 1930,
+            "yPosition": 920,
+            "width": 30,
+            "height": 31,
+            "animate": 2
+        },
+        {
+            "name": "Bird_Pink",
+            "imgName": "Bird_Pink",
+            "xPosition": 1960,
+            "yPosition": 890,
+            "width": 30,
+            "height": 31,
+            "animate": 2
+        },
+        {
+            "name": "Bird_Pink",
+            "imgName": "Bird_Pink",
+            "xPosition": 2000,
+            "yPosition": 900,
+            "width": 30,
+            "height": 31,
+            "animate": 2
+        },
+        {
+            "name": "Bird_Blue",
+            "imgName": "Bird_Blue",
+            "xPosition": 1320,
+            "yPosition": -70,
+            "width": 30,
+            "height": 31,
+            "animate": 2
+        },
+        {
+            "name": "Bird_Blue",
+            "imgName": "Bird_Blue",
+            "xPosition": 1350,
+            "yPosition": -30,
+            "width": 30,
+            "height": 31,
+            "animate": 2
+        },
+        {
+            "name": "Bird_Blue",
+            "imgName": "Bird_Blue",
+            "xPosition": 1300,
+            "yPosition": -25,
+            "width": 30,
+            "height": 31,
+            "animate": 2
+        },
+        {
+            "name": "Bird_Yellow",
+            "imgName": "Bird_Yellow",
+            "xPosition": 1420,
+            "yPosition": -90,
+            "width": 30,
+            "height": 31,
+            "animate": 2
+        },
+        {
+            "name": "Bird_Yellow",
+            "imgName": "Bird_Yellow",
+            "xPosition": 1390,
+            "yPosition": -60,
+            "width": 30,
+            "height": 31,
+            "animate": 2
+        },
+        {
+            "name": "Bird_Yellow",
+            "imgName": "Bird_Yellow",
+            "xPosition": 1430,
+            "yPosition": -30,
+            "width": 30,
+            "height": 31,
+            "animate": 2
+        }
+    ]
+}
