@@ -31,6 +31,11 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     var senderAction: UIButton?
     public static var delegate: CallbackSDK?
     public static var resortID: Int!
+    
+    var zoomScale : CGFloat = 1.0
+    var currentZoomScale : CGFloat = 1.0
+    
+    var isOrientationToggled : Bool = false
    
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +46,10 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         callAssestsWebService()
         //setUpStaticAssests()
         //getAnimationConfiguration()
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+//        self.edgesForExtendedLayout = []
     }
             
     // Create a folder in DocumentDirectory to store the files retrive from the server
@@ -211,13 +220,13 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         scrollView = UIScrollView(frame: view.bounds)
         
         if UIDevice.current.userInterfaceIdiom == .pad {
-            scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: -50, right: 0)
+//            scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
             scrollView.contentSize = imageView.bounds.size
             scrollView.setContentOffset(
                 CGPoint(x: scrollView.contentSize.width - scrollView.bounds.size.width, y: 0),
             animated: true)
         }else{
-            scrollView.contentInset = UIEdgeInsets(top: -50, left: 0, bottom: -50, right: 0)
+//            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             scrollView.contentSize = imageView.bounds.size
             scrollView.setContentOffset(
                 CGPoint(x: scrollView.contentSize.width - scrollView.bounds.size.width, y: 100),
@@ -225,19 +234,43 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         }
         
         self.scrollView.translatesAutoresizingMaskIntoConstraints = false;
-        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin, .flexibleTopMargin, .flexibleRightMargin, .flexibleLeftMargin]
         scrollView.delegate = self
-        scrollView.minimumZoomScale = 1
+        
+//        let widthScale = self.view.bounds.size.width / imageView.bounds.width
+//           let heightScale = self.view.bounds.size.height / imageView.bounds.height
+//           let scale = min(widthScale,heightScale)
+//           scrollView.minimumZoomScale = scale
+        
+        zoomScale = self.view.bounds.size.height / self.imageView.image!.size.height;
+
+//        if (zoomScale > 1) {
+//            self.scrollView.minimumZoomScale = 1;
+//            zoomScale = 1
+//        }
+
+        self.scrollView.minimumZoomScale = zoomScale;
+        
+        self.currentZoomScale = zoomScale
+//        scrollView.minimumZoomScale = 1
         scrollView.maximumZoomScale = 10.0
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
         imageView.addSubview(imageHouse)
         scrollView.addSubview(imageView)
         view.addSubview(scrollView)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            scrollView.zoomScale = 1.1
-        }
+        self.scrollView.zoomScale = zoomScale;
+        scrollView.alwaysBounceHorizontal = false
+        scrollView.alwaysBounceVertical = false
+        scrollView.isDirectionalLockEnabled = true
+        scrollView.bouncesZoom = false
+        scrollView.bounces = false
+        
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            scrollView.zoomScale = 1.1
+//        }
         setUpOrienttaion()
+        
     }
     
     func setUpOrienttaion() {
@@ -305,12 +338,20 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             self.view.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi*2))
             self.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.height, height: self.view.bounds.size.width)
             sender.isSelected = false
+//            if UIDevice.current.userInterfaceIdiom == .phone {
+                scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
+//            }
         } else {
             sender.isSelected = true
             print(CGFloat(-Double.pi/2))
             self.view.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi/2))
             self.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height)
+//            if UIDevice.current.userInterfaceIdiom == .phone {
+                scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
+//            }
         }
+        
+        isOrientationToggled = true
     }
     
     @objc func actionToggleTapped(sender: UIButton) {
@@ -393,6 +434,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         staticView.startAnimating()
         imageView.addSubview(staticView)
         staticView.frame = CGRect(x: item.xPosition!, y: item.yPosition!, width: item.width!, height: item.height!)
+
     }
     
     //To get the animation assests from the document directory and constructing array of image for animation
@@ -576,6 +618,29 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         return imageView
     }
     
+    public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        
+        var statHeight = UIApplication.shared.statusBarFrame.height * -1
+        
+        if scale > zoomScale  //&& UIDevice.current.userInterfaceIdiom == .phone
+        {
+            scrollView.contentInset = UIEdgeInsets(top: statHeight, left: 0, bottom: 0, right: 0)
+        }
+        else
+        {
+            if isOrientationToggled // && UIDevice.current.userInterfaceIdiom == .phone
+            {
+                scrollView.contentInset = UIEdgeInsets(top: statHeight, left: 0, bottom: 0, right: 0)
+            }
+            else
+            {
+                scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            }
+        }
+        
+        self.currentZoomScale = scale
+    }
+    
     
     //UIbutton event for the assests.
     @objc func actionAssestsTapped(sender: UIButton) {
@@ -599,9 +664,16 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                 }
                 
                 if UIDevice.current.userInterfaceIdiom == .phone {
-                scrollView.setContentOffset(
-                    CGPoint(x: captionView.frame.origin.x, y: 0),
-                animated: true)
+                    let offsetSize = captionView.frame.origin.x * currentZoomScale
+                    
+                    let imgWidth = scrollView.contentSize.width * currentZoomScale
+                    
+                    if offsetSize < imgWidth
+                    {
+                        scrollView.setContentOffset(CGPoint(x: captionView.frame.origin.x * currentZoomScale, y: 0),
+                        animated: true)
+                    }
+                
                 }
                 captionView.caption = filterArray![0].heading
                 captionView.desc = filterArray![0].description
