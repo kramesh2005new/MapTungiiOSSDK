@@ -33,7 +33,7 @@ struct Data : Codable {
     let resortId : Int?
     let resortName : String?
     let version : Int?
-    let staticMapAssets : StaticMapAssets?
+    let staticMapAssets : [StaticMapAssets]?
     let animationAssets : [AnimationAssets]?
 
     enum CodingKeys: String, CodingKey {
@@ -50,7 +50,7 @@ struct Data : Codable {
         resortId = try values.decodeIfPresent(Int.self, forKey: .resortId)
         resortName = try values.decodeIfPresent(String.self, forKey: .resortName)
         version = try values.decodeIfPresent(Int.self, forKey: .version)
-        staticMapAssets = try values.decodeIfPresent(StaticMapAssets.self, forKey: .staticMapAssets)
+        staticMapAssets = try values.decodeIfPresent([StaticMapAssets].self, forKey: .staticMapAssets)
         animationAssets = try values.decodeIfPresent([AnimationAssets].self, forKey: .animationAssets)
     }
 }
@@ -79,7 +79,7 @@ struct StaticMapAssets : Codable {
 
     enum CodingKeys: String, CodingKey {
 
-        case assetName = "assetName"
+        case assetName = "assetname"
         case assetUrl = "assetUrl"
     }
 

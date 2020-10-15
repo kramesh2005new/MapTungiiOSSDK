@@ -67,14 +67,14 @@ final class AssetsApiModel {
     
     func downloadAssets(parent: AnyObject, from: String, downloadURL: URLRequest, _ completion: @escaping ((Result<URL>) -> Void)) {
         let parentViewController = parent as? ParentViewController
-        parentViewController?.startAnimate()
+       // parentViewController?.startAnimate()
         
         apiClient.download(downloadURL) { (result) in
             switch result {
             case .success(let data):
-                if from != "Static" {
-                    parentViewController?.stopAnimate()
-                }
+//                if from != "Static" {
+//                    parentViewController?.stopAnimate()
+//                }
                 completion(.success(data))
             case .failure(let error):
                 parentViewController?.stopAnimate()

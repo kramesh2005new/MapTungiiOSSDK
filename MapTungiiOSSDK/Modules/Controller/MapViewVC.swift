@@ -36,6 +36,12 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     var currentZoomScale : CGFloat = 1.0
     
     var isOrientationToggled : Bool = false
+    
+    var bgEffectToLoad: Int = 1
+    var treeBunchEffectToLoad: Int = 1
+    
+    var popupWidth : CGFloat = 320
+    var popupHeight : CGFloat = 160
    
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +52,13 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         callAssestsWebService()
         //setUpStaticAssests()
         //getAnimationConfiguration()
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            
+            popupWidth = 380
+            
+            popupHeight = 170
+        }
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -86,9 +99,31 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                     if (self.versionNo == self.assetsResponse.data?.version){
                         self.setUpStaticAssests()
                         self.getAnimationConfiguration()
+                        self.bgEffectToLoad = 5
+                        self.getBGEffectConfiguration()
+                        self.treeBunchEffectToLoad = 1
+                        self.getTreeBunchConfiguration()
+                        self.treeBunchEffectToLoad = 2
+                        self.getTreeBunchConfiguration()
+                        self.treeBunchEffectToLoad = 3
+                        self.getTreeBunchConfiguration()
+                        self.treeBunchEffectToLoad = 4
+                        self.getTreeBunchConfiguration()
+                        self.treeBunchEffectToLoad = 6
+                        self.getTreeBunchConfiguration()
+                        self.getStaicAssestConfiguration()
+                        self.bgEffectToLoad = 2
+                        self.getBGEffectConfiguration()
+                        self.bgEffectToLoad = 3
+                        self.getBGEffectConfiguration()
+                        self.bgEffectToLoad = 4
+                        self.getBGEffectConfiguration()
                         self.callPivotPointWebService()
+                        self.geBirdAnimationConfiguration()
+                        self.getTitleAssestConfiguration()
                     }else{
-                        self.callDownloadStaticAssets()
+//                        self.callDownloadStaticAssets()
+                        self.downloadAndLoadMapBg()
                     }
                     let defaults = UserDefaults.standard
                     defaults.set(self.assetsResponse.data?.version, forKey: "version")
@@ -110,6 +145,9 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             case .success(let items):
                 DispatchQueue.main.async {
                     self.pivotResponse = items
+                    self.getPivotPointConfiguration()
+                    self.geBirdAnimationConfiguration()
+                    self.getTitleAssestConfiguration()
                 }
             case .failure(let error):
                 print("\(self) retrive error on get flights: \(error)")
@@ -117,12 +155,84 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         })
     }
     
+    func downloadAndLoadMapBg()
+    {
+        let fileName : String = "map_bg.png"
+        
+         var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        documentsURL.appendPathComponent(fileName)
+        try? FileManager.default.removeItem(at: documentsURL)
+        let url = URL(string: (self.assetsResponse?.data?.staticMapAssets?.filter{$0.assetName == "map_bg"}.first?.assetUrl!)!)
+        
+        let request = URLRequest(url:url!)
+        self.startAnimate()
+        assetsApiModel.downloadAssets(parent: self, from:"Static", downloadURL: request, { (result) in
+            switch result {
+            case .success(let items):
+                do {
+                try FileManager.default.copyItem(at: items, to: documentsURL)
+                DispatchQueue.main.async {
+                    self.downloadAndLoadMapHouse()
+//                    self.setUpStaticAssests()
+                   //self.callDownloadAnimationAssets()
+                    }}catch (let writeError) {
+                print("Error creating a file \(documentsURL) : \(writeError)")
+            }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.showAlertWithTitle(title: "Oops!",
+                                        message: "Something went wrong")
+                }
+                print("\(self) retrive error on get flights: \(error)")
+            }
+        })
+        
+        
+    }
+    
+    func downloadAndLoadMapHouse()
+    {
+        let fileName : String = "map_houses.png"
+        
+         var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        documentsURL.appendPathComponent(fileName)
+        try? FileManager.default.removeItem(at: documentsURL)
+        let url = URL(string: (self.assetsResponse?.data?.staticMapAssets?.filter{$0.assetName == "map_houses"}.first?.assetUrl!)!)
+        
+        let request = URLRequest(url:url!)
+        
+        assetsApiModel.downloadAssets(parent: self, from:"Static", downloadURL: request, { (result) in
+            self.stopAnimate()
+            switch result {
+            case .success(let items):
+                do {
+                try FileManager.default.copyItem(at: items, to: documentsURL)
+                DispatchQueue.main.async {
+                    self.setUpStaticAssests()
+                    self.callDownloadBGEffects1()
+                   //self.callDownloadAnimationAssets()
+                    }}catch (let writeError) {
+                print("Error creating a file \(documentsURL) : \(writeError)")
+            }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.showAlertWithTitle(title: "Oops!",
+                                        message: "Something went wrong")
+                }
+                print("\(self) retrive error on get flights: \(error)")
+            }
+        })
+        
+        
+    }
+    
     //Download the static assests and store it in the DocumentDirectory folder and unzip the folder in the map_assests.
     func callDownloadStaticAssets(){
         var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        documentsURL.appendPathComponent("map_assets/static_assets_19.zip")
+        documentsURL.appendPathComponent("Static_BG.zip")
         try? FileManager.default.removeItem(at: documentsURL)
-        let url = URL(string: (self.assetsResponse?.data?.staticMapAssets?.assetUrl!)!)
+//        let url = URL(string: (self.assetsResponse?.data?.staticMapAssets?[0].assetUrl!)!)
+        let url = URL(string: (self.assetsResponse?.data?.staticMapAssets?.filter{$0.assetName == "Static_BG"}.first?.assetUrl!)!)
         let request = URLRequest(url:url!)
         
         assetsApiModel.downloadAssets(parent: self, from:"Static", downloadURL: request, { (result) in
@@ -132,7 +242,10 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                 try FileManager.default.copyItem(at: items, to: documentsURL)
                 DispatchQueue.main.async {
                    self.unZipAssets(filePath : documentsURL, from: "Static")
-                   self.callDownloadAnimationAssets()
+                    self.getStaicAssestConfiguration()
+                    self.bgEffectToLoad = 2
+                    self.callDownloadBGEffects()
+//                   self.callDownloadAnimationAssets()
                     }}catch (let writeError) {
                 print("Error creating a file \(documentsURL) : \(writeError)")
             }
@@ -173,6 +286,159 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             }
         })
     }
+    
+    //Download the BG Effects1 and store it in the DocumentDirectory folder and unzip it.
+    func callDownloadBGEffects1(){
+         var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+         documentsURL.appendPathComponent("BG_Effects_1.zip")
+         try? FileManager.default.removeItem(at: documentsURL)
+//         let url = URL(string: (self.assetsResponse?.data?.animationAssets![0].assetUrl!)!)
+         let url = URL(string: (self.assetsResponse?.data?.animationAssets?.filter{$0.assetname == "BG_Effects_1"}.first?.assetUrl!)!)
+         let request = URLRequest(url:url!)
+        
+        assetsApiModel.downloadAssets(parent: self, from:"Animation", downloadURL: request, { (result) in
+            
+            switch result {
+            case .success(let items):
+                do {
+                try FileManager.default.copyItem(at: items, to: documentsURL)
+                DispatchQueue.main.async {
+                   self.unZipAssets(filePath : documentsURL, from: "Animation")
+                    self.getAnimationConfiguration()
+                    self.bgEffectToLoad = 5
+                    self.callDownloadBGEffects()
+                    }}catch (let writeError) {
+                print("Error creating a file \(documentsURL) : \(writeError)")
+            }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.showAlertWithTitle(title: "Oops!",
+                                        message: "Something went wrong")
+                }
+                print("\(self) retrive error on get flights: \(error)")
+            }
+        })
+    }
+    
+     //Download the BG Effects and store it in the DocumentDirectory folder and unzip it.
+     func callDownloadBGEffects(){
+             var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+             documentsURL.appendPathComponent("BG_Effects_\(bgEffectToLoad).zip")
+             try? FileManager.default.removeItem(at: documentsURL)
+    //         let url = URL(string: (self.assetsResponse?.data?.animationAssets![0].assetUrl!)!)
+             let url = URL(string: (self.assetsResponse?.data?.animationAssets?.filter{$0.assetname == "BG_Effects_\(bgEffectToLoad)"}.first?.assetUrl!)!)
+             let request = URLRequest(url:url!)
+            
+            assetsApiModel.downloadAssets(parent: self, from:"Animation", downloadURL: request, { (result) in
+                switch result {
+                case .success(let items):
+                    do {
+                    try FileManager.default.copyItem(at: items, to: documentsURL)
+                    DispatchQueue.main.async {
+                       self.unZipAssets(filePath : documentsURL, from: "Animation")
+                        self.getBGEffectConfiguration()
+                        if self.bgEffectToLoad == 5
+                        {
+                            self.callDownloadTreeBunchEffects()
+                        }
+                        else if self.bgEffectToLoad < 4
+                        {
+                            self.bgEffectToLoad += 1
+                            self.callDownloadBGEffects()
+                        }
+                        else if self.bgEffectToLoad == 4
+                        {
+                            self.callDownloadTungiPopupImages()
+                            
+                        }
+                        
+                        }}catch (let writeError) {
+                    print("Error creating a file \(documentsURL) : \(writeError)")
+                }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.showAlertWithTitle(title: "Oops!",
+                                            message: "Something went wrong")
+                    }
+                    print("\(self) retrive error on get flights: \(error)")
+                }
+            })
+        }
+    
+     //Download the Tree Bunch Effects and store it in the DocumentDirectory folder and unzip it.
+    func callDownloadTreeBunchEffects(){
+             var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+             documentsURL.appendPathComponent("Tree_Bunch_\(treeBunchEffectToLoad).zip")
+             try? FileManager.default.removeItem(at: documentsURL)
+    //         let url = URL(string: (self.assetsResponse?.data?.animationAssets![0].assetUrl!)!)
+             let url = URL(string: (self.assetsResponse?.data?.animationAssets?.filter{$0.assetname == "Tree_Bunch_\(treeBunchEffectToLoad)"}.first?.assetUrl!)!)
+             let request = URLRequest(url:url!)
+            
+            assetsApiModel.downloadAssets(parent: self, from:"Animation", downloadURL: request, { (result) in
+                switch result {
+                case .success(let items):
+                    do {
+                    try FileManager.default.copyItem(at: items, to: documentsURL)
+                    DispatchQueue.main.async {
+                       self.unZipAssets(filePath : documentsURL, from: "Animation")
+                        self.getTreeBunchConfiguration()
+                        if self.treeBunchEffectToLoad <= 3
+                        {
+                            self.treeBunchEffectToLoad += 1
+                            self.callDownloadTreeBunchEffects()
+                        }
+                        else if self.treeBunchEffectToLoad == 4
+                        {
+                            self.treeBunchEffectToLoad += 2
+                            self.callDownloadTreeBunchEffects()
+                        }
+                        else if self.treeBunchEffectToLoad == 6
+                        {
+                            self.callDownloadStaticAssets()
+                        }
+                        
+                        }}catch (let writeError) {
+                    print("Error creating a file \(documentsURL) : \(writeError)")
+                }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.showAlertWithTitle(title: "Oops!",
+                                            message: "Something went wrong")
+                    }
+                    print("\(self) retrive error on get flights: \(error)")
+                }
+            })
+        }
+    
+     //Download the Popup images and store it in the DocumentDirectory folder and unzip it.
+    func callDownloadTungiPopupImages(){
+             var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+             documentsURL.appendPathComponent("Tungi_Popup_Images.zip")
+             try? FileManager.default.removeItem(at: documentsURL)
+    //         let url = URL(string: (self.assetsResponse?.data?.animationAssets![0].assetUrl!)!)
+             let url = URL(string: (self.assetsResponse?.data?.animationAssets?.filter{$0.assetname == "Tungi_Popup_images"}.first?.assetUrl!)!)
+             let request = URLRequest(url:url!)
+            
+            assetsApiModel.downloadAssets(parent: self, from:"Animation", downloadURL: request, { (result) in
+                switch result {
+                case .success(let items):
+                    do {
+                    try FileManager.default.copyItem(at: items, to: documentsURL)
+                    DispatchQueue.main.async {
+                       self.unZipAssets(filePath : documentsURL, from: "Animation")
+                        self.callPivotPointWebService()
+                        }}catch (let writeError) {
+                    print("Error creating a file \(documentsURL) : \(writeError)")
+                }
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        self.showAlertWithTitle(title: "Oops!",
+                                            message: "Something went wrong")
+                    }
+                    print("\(self) retrive error on get flights: \(error)")
+                }
+            })
+        }
            
     //To Unzip the assests in the DocumentDirectory
     func unZipAssets(filePath: URL, from: String){
@@ -180,18 +446,18 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         var folderName = filePath.lastPathComponent
         folderName = folderName.replacingOccurrences(of: ".zip", with: "")
         do {
-            var documentsDirectory = self.getDirectoryPath()
+            var documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             documentsDirectory = documentsDirectory.appendingPathComponent(folderName)
-            let fileURL = URL(fileURLWithPath: documentsDirectory.absoluteString)
-            try? FileManager.default.removeItem(at: fileURL)
+//            let fileURL = URL(fileURLWithPath: documentsDirectory.absoluteString)
+            try? FileManager.default.removeItem(at: documentsDirectory)
             try Zip.unzipFile(filePath, destination: documentsDirectory, overwrite: true, password: "password", progress: { (progress) -> () in
             }) // Unzip
             if from == "Static" {
                 
             }else{
-                setUpStaticAssests()
-                getAnimationConfiguration()
-                callPivotPointWebService()
+                //setUpStaticAssests()
+//                getAnimationConfiguration()
+                //callPivotPointWebService()
             }
         }
         catch {
@@ -203,14 +469,14 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     func setUpStaticAssests(){
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         do{
-            let documentsURL = self.getDirectoryPath()
-            let mapURL = documentsURL.appendingPathComponent("static_assets_19/Static_BG/map_bg.png")
-            let mapfileURLs = URL(fileURLWithPath: mapURL.absoluteString)
-            let mapimage = UIImage(data: try Foundation.Data(contentsOf: mapfileURLs))
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let mapURL = documentsURL.appendingPathComponent("map_bg.png")
+            //let mapfileURLs = URL(fileURLWithPath: mapURL.absoluteString)
+            let mapimage = UIImage(data: try Foundation.Data(contentsOf: mapURL))
             imageView = UIImageView(image: mapimage)
-            let houseURL = documentsURL.appendingPathComponent("static_assets_19/Static_BG/map_houses.png")
-            let housefileURLs = URL(fileURLWithPath: houseURL.absoluteString)
-            let houseimage = UIImage(data: try Foundation.Data(contentsOf: housefileURLs))
+            let houseURL = documentsURL.appendingPathComponent("map_houses.png")
+//            let housefileURLs = URL(fileURLWithPath: houseURL.absoluteString)
+            let houseimage = UIImage(data: try Foundation.Data(contentsOf: houseURL))
             imageHouse = UIImageView(image: houseimage)
         }catch{
             print("Error while enumerating files in the Document Directory")
@@ -386,34 +652,116 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     func getAnimationConfiguration(){
         let bundle = Bundle(for: MapViewVC.self)
         let animationAssets = bundle.decode("Assestconfig.json")
-        
-        for i in 0..<animationAssets.bgeffects!.count {
-            setEffectsAssest(item: animationAssets.bgeffects![i])
+
+        for i in 0..<animationAssets.animationFrames!.count {
+            getAnimationAssest(item: animationAssets.animationFrames![i])
         }
+
+    }
+    
+    // To get the BG Effect configuration from the local bundle.
+    func getBGEffectConfiguration(){
+        let bundle = Bundle(for: MapViewVC.self)
+        let animationAssets = bundle.decode("Assestconfig.json")
+        
+        var effects = animationAssets.bgeffects5!
+        
+        switch bgEffectToLoad {
+        case 2:
+            effects = animationAssets.bgeffects2!
+        case 3:
+            effects = animationAssets.bgeffects3!
+        case 4:
+            effects = animationAssets.bgeffects4!
+        case 5:
+            effects = animationAssets.bgeffects5!
+        default:
+            break
+        }
+        
+        
+        for i in 0..<effects.count {
+            setEffectsAssest(item: effects[i], folderName: "BG_Effects_\(bgEffectToLoad)/" )
+        }
+        
+    }
+    
+    // To get the Title Asset configuration from the local bundle.
+    func getTitleAssestConfiguration(){
+        let bundle = Bundle(for: MapViewVC.self)
+        let animationAssets = bundle.decode("Assestconfig.json")
+        
+        for i in 0..<animationAssets.title!.count {
+            getTitleAssest(item: animationAssets.title![i], index:i)
+        }
+    }
+    
+    // To get the Pivot point configuration from the local bundle.
+    func getPivotPointConfiguration(){
+        let bundle = Bundle(for: MapViewVC.self)
+        let animationAssets = bundle.decode("Assestconfig.json")
+        
+        for i in 0..<animationAssets.pivot!.count {
+            setPivotAssest(item: animationAssets.pivot![i])
+        }
+    }
+    
+    // To get the Static asset configuration from the local bundle.
+    func getStaicAssestConfiguration(){
+        let bundle = Bundle(for: MapViewVC.self)
+        let animationAssets = bundle.decode("Assestconfig.json")
         
         for i in 0..<animationAssets.staticAssets!.count {
             setStaticAssest(item: animationAssets.staticAssets![i])
         }
         
-        for i in 0..<animationAssets.animationFrames!.count {
-            getAnimationAssest(item: animationAssets.animationFrames![i])
-        }
-
-        for i in 0..<animationAssets.title!.count {
-            getTitleAssest(item: animationAssets.title![i], index:i)
+    }
+    
+    // To get the Bird Animation configuration from the local bundle.
+    func geBirdAnimationConfiguration(){
+        let bundle = Bundle(for: MapViewVC.self)
+        let animationAssets = bundle.decode("Assestconfig.json")
+        
+        for i in 0..<animationAssets.birdAnimation!.count {
+            setEffectsAssest(item: animationAssets.birdAnimation![i], folderName: "BG_Effects_5/")
         }
         
-//        for i in 0..<animationAssets.pivot!.count {
-//            setPivotAssest(item: animationAssets.pivot![i])
-//        }
+    }
+    
+    // To get the Tree bunch configuration from the local bundle.
+    func getTreeBunchConfiguration(){
+        let bundle = Bundle(for: MapViewVC.self)
+        let animationAssets = bundle.decode("Assestconfig.json")
+        
+        var effects = animationAssets.bgeffectsTree1
+        
+        switch treeBunchEffectToLoad {
+        case 1:
+            effects = animationAssets.bgeffectsTree1
+        case 2:
+            effects = animationAssets.bgeffectsTree2
+        case 3:
+            effects = animationAssets.bgeffectsTree3
+        case 4:
+            effects = animationAssets.bgeffectsTree4
+        case 6:
+            effects = animationAssets.bgeffectsTree6
+        default:
+            break
+        }
+        
+        for i in 0..<effects!.count {
+            setEffectsAssest(item: effects![i], folderName: "")
+        }
+        
     }
     
     //To get the static assests from the document directory and constructing array of image
     func setStaticAssest (item: StaticAssets){
             arrStatic = []
             let fileManager = FileManager.default
-            var documentsURL = self.getDirectoryPath()
-        documentsURL = documentsURL.appendingPathComponent("static_assets_19/Static_BG/\(item.name ?? "")")
+            var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        documentsURL = documentsURL.appendingPathComponent("Static_BG/\(item.name ?? "")")
             
             do {
                 let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: [.nameKey])
@@ -441,8 +789,8 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     func getAnimationAssest (item: AnimationFrames){
             arrImage = []
             let fileManager = FileManager.default
-            var documentsURL = self.getDirectoryPath()
-        documentsURL = documentsURL.appendingPathComponent("animation_assets_19/animation/Animation_Frames/\(item.name ?? "")")
+            var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        documentsURL = documentsURL.appendingPathComponent("BG_Effects_1/\(item.name ?? "")")
             
             do {
                 let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: [.nameKey])
@@ -474,11 +822,11 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     //To get the Title assests from the document directory and constructing array of image for animation
     func getTitleAssest (item: Title, index:Int){
             arrTitle = []
-            var documentsURL = self.getDirectoryPath()
+            var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             if item.value == 0 {
-                documentsURL = documentsURL.appendingPathComponent("static_assets_19/Static_BG/Green Labels/\(item.name ?? "")" + ".png")
+                documentsURL = documentsURL.appendingPathComponent("Static_BG/Green Labels/\(item.name ?? "")" + ".png")
             }else{
-                documentsURL = documentsURL.appendingPathComponent("static_assets_19/Static_BG/Orange Labels/\(item.name ?? "")" + ".png")
+                documentsURL = documentsURL.appendingPathComponent("Static_BG/Orange Labels/\(item.name ?? "")" + ".png")
             }            
             do {
                 //let url = documentsURL.appendingPathComponent("\(item.name ?? "")" + ".png")
@@ -527,11 +875,11 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
 //        imageView.addSubview(btnPivot)
     }
     
-    func setEffectsAssest (item: Bgeffects){
+    func setEffectsAssest (item: Bgeffects, folderName: String){
             arrImage = []
             let fileManager = FileManager.default
-            var documentsURL = self.getDirectoryPath()
-        documentsURL = documentsURL.appendingPathComponent("animation_assets_19/animation/BG_Effects/\(item.name ?? "")")
+            var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        documentsURL = documentsURL.appendingPathComponent("\(folderName)\(item.name ?? "")")
             
             do {
                 let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: [.nameKey])
@@ -618,9 +966,10 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         return imageView
     }
     
+    
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         
-        let statHeight = UIApplication.shared.statusBarFrame.height * -1
+        var statHeight = UIApplication.shared.statusBarFrame.height * -1
         
         if scale > zoomScale  //&& UIDevice.current.userInterfaceIdiom == .phone
         {
@@ -639,6 +988,34 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         }
         
         self.currentZoomScale = scale
+        
+        if self.captionView != nil
+        {
+                
+            self.captionView.transform = CGAffineTransform(scaleX: 1.0/scale, y: 1.0/scale)
+            
+            var yPosition = senderAction!.frame.origin.y - self.captionView.frame.size.height
+            
+            if senderAction!.tag == 1 || senderAction!.tag == 9 || senderAction!.tag == 10 || senderAction!.tag == 11 {
+                
+                yPosition = senderAction!.frame.origin.y + senderAction!.frame.size.height
+            }
+            
+            captionView.frame = CGRect(x: self.captionView.frame.origin.x, y: yPosition, width: self.captionView.frame.size.width, height: self.captionView.frame.size.height)
+            
+            if (senderAction!.tag == 2 || senderAction!.tag == 8) //&& UIDevice.current.userInterfaceIdiom == .phone
+            {
+                let xPosition = (senderAction!.frame.origin.x + senderAction!.frame.size.width) - self.captionView.frame.size.width
+                
+                captionView.frame = CGRect(x: xPosition, y: yPosition, width: self.captionView.frame.size.width, height: self.captionView.frame.size.height)
+            }
+            if senderAction!.tag == 10
+            {
+                let xPosition = (senderAction!.frame.origin.x + senderAction!.frame.size.width) - self.captionView.frame.size.width
+                
+                 captionView.frame = CGRect(x: xPosition, y: yPosition, width: self.captionView.frame.size.width, height: self.captionView.frame.size.height)
+            }
+        }
     }
     
     
@@ -647,8 +1024,8 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         
         senderAction = sender
         
-        var documentsURL = self.getDirectoryPath()
-        documentsURL = documentsURL.appendingPathComponent("static_assets_19/Static_BG/Popup")
+        var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        documentsURL = documentsURL.appendingPathComponent("Static_BG/Popup")
         
         if captionView != nil {
             captionView.removeFromSuperview()
@@ -657,11 +1034,39 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         if ((self.pivotResponse?.data?.pivotPoints) != nil) {
             let filterArray = self.pivotResponse!.data?.pivotPoints!.filter() { $0.pivotId == String(sender.tag) }
             if filterArray!.count > 0 {
-                if sender.tag == 2 {
-                    captionView = customPopup(frame: CGRect(x: sender.frame.origin.x-175, y: sender.frame.origin.y-170, width: 380, height: 200))
-                }else{
-                    captionView = customPopup(frame: CGRect(x: sender.frame.origin.x-145, y: sender.frame.origin.y-170, width: 380, height: 200))
+//                if sender.tag == 2 {
+//                    captionView = customPopup(frame: CGRect(x: sender.frame.origin.x-175, y: sender.frame.origin.y-170, width: 360, height: 180))
+//                }else{
+                  //  captionView = customPopup(frame: CGRect(x: (sender.frame.origin.x ) - ((130 * self.currentZoomScale) * (1.0/self.currentZoomScale)) , y: (sender.frame.origin.y) - ((220 * self.currentZoomScale) * (1.0/self.currentZoomScale)), width: 360, height: 180))
+                    
+                if sender.tag == 1 || sender.tag == 9 || sender.tag == 10 || sender.tag == 11 {
+                    
+                    if sender.tag == 10
+                    {
+                        let xPosition = (senderAction!.frame.origin.x + senderAction!.frame.size.width) - (popupWidth * 1/currentZoomScale)
+                        
+                         captionView = customPopup(frame: CGRect(x: xPosition, y: sender.frame.origin.y + (sender.frame.size.height ), width: popupWidth, height: popupHeight))
+                    }
+                    else
+                    {
+                         captionView = customPopup(frame: CGRect(x: sender.frame.origin.x-((popupWidth/2) - (sender.frame.size.width / 2)), y: sender.frame.origin.y + (sender.frame.size.height ), width: popupWidth, height: popupHeight))
+                    }
+                   
                 }
+                else if (sender.tag == 2 || sender.tag == 8) //&& UIDevice.current.userInterfaceIdiom == .phone
+                {
+                   
+                    let xPosition = (senderAction!.frame.origin.x + senderAction!.frame.size.width) - (popupWidth * 1/currentZoomScale)
+                    
+                    captionView = customPopup(frame: CGRect(x: xPosition, y: sender.frame.origin.y-popupHeight, width: popupWidth, height: popupHeight))
+                }
+                else
+                {
+                    captionView = customPopup(frame: CGRect(x: sender.frame.origin.x-((popupWidth / 2) - (sender.frame.size.width / 2)), y: sender.frame.origin.y-popupHeight, width: popupWidth, height: popupHeight))
+                }
+                
+                   
+//                }
                 
                 if UIDevice.current.userInterfaceIdiom == .phone {
                     let offsetSize = captionView.frame.origin.x * currentZoomScale
@@ -670,10 +1075,13 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                     
                     if offsetSize < imgWidth
                     {
-                        scrollView.setContentOffset(CGPoint(x: captionView.frame.origin.x * currentZoomScale, y: 0),
-                        animated: true)
+                        scrollView.setContentOffset(CGPoint(x: captionView.frame.origin.x * currentZoomScale, y: scrollView.contentOffset.y), animated: true)
                     }
-                
+                    else
+                    {
+                        scrollView.setContentOffset(CGPoint(x: scrollView.contentSize.width * currentZoomScale, y: scrollView.contentOffset.y), animated: true)
+                    }
+
                 }
                 captionView.caption = filterArray![0].heading
                 captionView.desc = filterArray![0].description
@@ -681,14 +1089,46 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                 captionView.btnKnowMore.tag = sender.tag
                 captionView.btnKnowMore.addTarget(self, action: #selector(actionKnowMore), for: .touchUpInside)
                 do{
-                    documentsURL.appendPathComponent("popup_background.png")
-                    let imageURL = URL(fileURLWithPath: documentsURL.absoluteString)
-                    let image = UIImage(data: try Foundation.Data(contentsOf: imageURL))
-                    captionView.background = image
+                     if (sender.tag == 2 || sender.tag == 8) //&& UIDevice.current.userInterfaceIdiom == .phone
+                     {
+                        documentsURL.appendPathComponent("popup_background_right.png")
+                    }
+                    else if sender.tag == 10
+                    {
+                        documentsURL.appendPathComponent("popup_background_right.png")
+                    }
+                    else
+                    {
+                        documentsURL.appendPathComponent("popup_background_centre.png")
+                    }
+                    //let imageURL = URL(fileURLWithPath: documentsURL.absoluteString)
+                    let image = UIImage(data: try Foundation.Data(contentsOf: documentsURL))
+                    
+                    if sender.tag == 1 || sender.tag == 9 || sender.tag == 10 || sender.tag == 11 {
+                        
+                        if sender.tag == 10
+                        {
+                            captionView.background = image
+                            captionView.imgBG.transform = CGAffineTransform(scaleX: 1, y: -1)
+                            captionView.moveControlsDown(isMoveX: false)
+                        }
+                        else
+                        {
+                            captionView.background = image!.rotate(radians: .pi) //image
+                            captionView.moveControlsDown(isMoveX: true)
+                        }
+                        
+                        
+                    }
+                    else
+                    {
+                        captionView.background = image
+                    }
+                    
                 }catch{ print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")}
                 
-                var iocnsURL = self.getDirectoryPath()
-                iocnsURL = iocnsURL.appendingPathComponent("animation_assets_19/animation/Tungi_Popup_Images")
+                var iocnsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                iocnsURL = iocnsURL.appendingPathComponent("Tungi_Popup_Images")
                 
                 if sender.tag == 1 {
                     iocnsURL.appendPathComponent("Svaastha_Spa.jpg")
@@ -714,16 +1154,48 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                     iocnsURL.appendPathComponent("Beauty_Salon.jpg")
                 }
                 
-                let iconPath = URL(fileURLWithPath: iocnsURL.absoluteString)
+                //let iconPath = URL(fileURLWithPath: iocnsURL.absoluteString)
                 do{
-                    let image = UIImage(data: try Foundation.Data(contentsOf: iconPath))
+                    let image = UIImage(data: try Foundation.Data(contentsOf: iocnsURL))
                     captionView.icon = image
-                }catch{ print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")}
+                }catch{ print("Error while enumerating files \(iocnsURL.path): \(error.localizedDescription)")}
         
+               
+                
                 imageView.addSubview(captionView)
+                
+                var transform =  CGAffineTransform.identity
+                transform = transform.scaledBy(x: 1.0/self.currentZoomScale, y: 1.0/self.currentZoomScale) //CGAffineTransform(scaleX: 1.0/self.currentZoomScale, y: 1.0/self.currentZoomScale)
+                transform = transform.translatedBy(x: 0, y: 0)
+                
+                self.captionView.transform = transform
+                
+                var yPosition = sender.frame.origin.y - self.captionView.frame.size.height
+                
+                if senderAction!.tag == 1 || senderAction!.tag == 9 || senderAction!.tag == 10 || senderAction!.tag == 11 {
+                    
+                    yPosition = senderAction!.frame.origin.y + senderAction!.frame.size.height
+                }
+                
+                captionView.frame = CGRect(x: self.captionView.frame.origin.x, y: yPosition, width: self.captionView.frame.size.width, height: self.captionView.frame.size.height)
+                
+                if (sender.tag == 2 || sender.tag == 8) //&& UIDevice.current.userInterfaceIdiom == .phone
+                {
+                    let xPosition = (sender.frame.origin.x + sender.frame.size.width) - self.captionView.frame.size.width
+                    
+                    captionView.frame = CGRect(x: xPosition, y: yPosition, width: self.captionView.frame.size.width, height: self.captionView.frame.size.height)
+                }
+                if sender.tag == 10
+                {
+                    let xPosition = (senderAction!.frame.origin.x + senderAction!.frame.size.width) - self.captionView.frame.size.width
+                    
+                     captionView.frame = CGRect(x: xPosition, y: yPosition, width: self.captionView.frame.size.width, height: self.captionView.frame.size.height)
+                }
             }
         }
     }
+    
+    
     
     @objc func imageTapped(sender: UIButton){
         if captionView != nil {

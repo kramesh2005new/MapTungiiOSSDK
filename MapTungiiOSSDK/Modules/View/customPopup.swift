@@ -65,12 +65,12 @@ class customPopup: UIView {
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
-        var documentsURL = self.getDirectoryPath()
-        documentsURL = documentsURL.appendingPathComponent("static_assets_19/Static_BG/Popup")
+        var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        documentsURL = documentsURL.appendingPathComponent("Static_BG/Popup")
         do{
             documentsURL.appendPathComponent("bg_knowmore.png")
-            let imageURL = URL(fileURLWithPath: documentsURL.absoluteString)
-            let image = UIImage(data: try Foundation.Data(contentsOf: imageURL))
+            //let imageURL = URL(fileURLWithPath: documentsURL.absoluteString)
+            let image = UIImage(data: try Foundation.Data(contentsOf: documentsURL))
             btnKnowMore.setBackgroundImage(image, for: .normal)
         }catch{ print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")}
     }
@@ -86,5 +86,21 @@ class customPopup: UIView {
         let url = URL(string: pathWithFolderName) // convert path in url
           
         return url!
+    }
+    
+    func moveControlsDown(isMoveX : Bool)
+    {
+        var xMove : CGFloat = 0
+        
+        if isMoveX
+        {
+            xMove = 5
+        }
+        
+        lblCaption.frame = CGRect(x: lblCaption.frame.origin.x, y: lblCaption.frame.origin.y + 25, width: lblCaption.frame.size.width, height: lblCaption.frame.size.height)
+        lbldescription.frame = CGRect(x: lbldescription.frame.origin.x, y: lbldescription.frame.origin.y + 25, width: lbldescription.frame.size.width, height: lbldescription.frame.size.height)
+        lblDeal.frame = CGRect(x: lblDeal.frame.origin.x, y: lblDeal.frame.origin.y + 25, width: lblDeal.frame.size.width, height: lblDeal.frame.size.height)
+        imgIcon.frame = CGRect(x: imgIcon.frame.origin.x + xMove, y: imgIcon.frame.origin.y + 25, width: imgIcon.frame.size.width, height: imgIcon.frame.size.height)
+        btnKnowMore.frame = CGRect(x: btnKnowMore.frame.origin.x, y: btnKnowMore.frame.origin.y + 25, width: btnKnowMore.frame.size.width, height: btnKnowMore.frame.size.height)
     }
 }

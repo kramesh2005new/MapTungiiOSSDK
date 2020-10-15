@@ -14,6 +14,16 @@ struct AssestsConfigurationModel : Codable {
     let pivot : [Pivot]?
     let staticAssets : [StaticAssets]?
     let bgeffects : [Bgeffects]?
+    let bgeffects2 : [Bgeffects]?
+    let bgeffects3 : [Bgeffects]?
+    let bgeffects4 : [Bgeffects]?
+    let bgeffects5 : [Bgeffects]?
+    let birdAnimation : [Bgeffects]?
+    let bgeffectsTree1 : [Bgeffects]?
+    let bgeffectsTree2 : [Bgeffects]?
+    let bgeffectsTree3 : [Bgeffects]?
+    let bgeffectsTree4 : [Bgeffects]?
+    let bgeffectsTree6 : [Bgeffects]?
 
     enum CodingKeys: String, CodingKey {
 
@@ -22,6 +32,16 @@ struct AssestsConfigurationModel : Codable {
         case pivot = "pivot"
         case staticAssets = "staticAssets"
         case bgeffects = "bgeffects"
+        case bgeffects2 = "bgeffects2"
+        case bgeffects3 = "bgeffects3"
+        case bgeffects4 = "bgeffects4"
+        case bgeffects5 = "bgeffects5"
+        case birdAnimation = "birdAnimation"
+        case bgeffectsTree1 = "bgeffectsTree1"
+        case bgeffectsTree2 = "bgeffectsTree2"
+        case bgeffectsTree3 = "bgeffectsTree3"
+        case bgeffectsTree4 = "bgeffectsTree4"
+        case bgeffectsTree6 = "bgeffectsTree6"
     }
 
     init(from decoder: Decoder) throws {
@@ -31,6 +51,16 @@ struct AssestsConfigurationModel : Codable {
         pivot = try values.decodeIfPresent([Pivot].self, forKey: .pivot)
         staticAssets = try values.decodeIfPresent([StaticAssets].self, forKey: .staticAssets)
         bgeffects = try values.decodeIfPresent([Bgeffects].self, forKey: .bgeffects)
+        bgeffects2 = try values.decodeIfPresent([Bgeffects].self, forKey: .bgeffects2)
+        bgeffects3 = try values.decodeIfPresent([Bgeffects].self, forKey: .bgeffects3)
+        bgeffects4 = try values.decodeIfPresent([Bgeffects].self, forKey: .bgeffects4)
+        bgeffects5 = try values.decodeIfPresent([Bgeffects].self, forKey: .bgeffects5)
+        birdAnimation = try values.decodeIfPresent([Bgeffects].self, forKey: .birdAnimation)
+        bgeffectsTree1 = try values.decodeIfPresent([Bgeffects].self, forKey: .bgeffectsTree1)
+        bgeffectsTree2 = try values.decodeIfPresent([Bgeffects].self, forKey: .bgeffectsTree2)
+        bgeffectsTree3 = try values.decodeIfPresent([Bgeffects].self, forKey: .bgeffectsTree3)
+        bgeffectsTree4 = try values.decodeIfPresent([Bgeffects].self, forKey: .bgeffectsTree4)
+        bgeffectsTree6 = try values.decodeIfPresent([Bgeffects].self, forKey: .bgeffectsTree6)
     }
 
 }
