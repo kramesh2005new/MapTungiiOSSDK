@@ -969,7 +969,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         
-        var statHeight = UIApplication.shared.statusBarFrame.height * -1
+        let statHeight = UIApplication.shared.statusBarFrame.height * -1
         
         if scale > zoomScale  //&& UIDevice.current.userInterfaceIdiom == .phone
         {
