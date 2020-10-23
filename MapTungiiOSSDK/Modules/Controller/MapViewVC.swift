@@ -42,6 +42,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     
     var popupWidth : CGFloat = 320
     var popupHeight : CGFloat = 160
+    
    
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,12 +54,12 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         //setUpStaticAssests()
         //getAnimationConfiguration()
         
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            
-            popupWidth = 380
-            
-            popupHeight = 170
-        }
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//
+//            popupWidth = 380
+//
+//            popupHeight = 170
+//        }
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -119,19 +120,28 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                         self.bgEffectToLoad = 4
                         self.getBGEffectConfiguration()
                         self.callPivotPointWebService()
-                        self.geBirdAnimationConfiguration()
-                        self.getTitleAssestConfiguration()
+//                        self.geBirdAnimationConfiguration()
+//                        self.getTitleAssestConfiguration()
                     }else{
 //                        self.callDownloadStaticAssets()
                         self.downloadAndLoadMapBg()
                     }
-                    let defaults = UserDefaults.standard
-                    defaults.set(self.assetsResponse.data?.version, forKey: "version")
+                    
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.showAlertWithTitle(title: "Oops!",
-                                        message: "Something went wrong")
+                    self.showAlertWithTitle(title: "Oops!", message: "Something went wrong"){
+                        if self.navigationController != nil
+                        {
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    }
+                    
+//                    let defaults = UserDefaults.standard
+//                    defaults.removeObject(forKey: "version")
+//                    self.versionNo = -1
+                    
+                    
                 }
                 print("\(self) retrive error on get flights: \(error)")
             }
@@ -141,13 +151,18 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     // Calling the server to get the Pivot points
     func callPivotPointWebService(){
         assetsApiModel.getPivotWebservice(parent: self, resort:MapViewVC.resortID, { (result) in
+            
+            self.stopAnimate()
             switch result {
             case .success(let items):
                 DispatchQueue.main.async {
                     self.pivotResponse = items
-                    self.getPivotPointConfiguration()
+                    //self.getPivotPointConfiguration()
                     self.geBirdAnimationConfiguration()
                     self.getTitleAssestConfiguration()
+                    
+                    let defaults = UserDefaults.standard
+                    defaults.set(self.assetsResponse.data?.version, forKey: "version")
                 }
             case .failure(let error):
                 print("\(self) retrive error on get flights: \(error)")
@@ -165,7 +180,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         let url = URL(string: (self.assetsResponse?.data?.staticMapAssets?.filter{$0.assetName == "map_bg"}.first?.assetUrl!)!)
         
         let request = URLRequest(url:url!)
-        self.startAnimate()
+        //self.startAnimate()
         assetsApiModel.downloadAssets(parent: self, from:"Static", downloadURL: request, { (result) in
             switch result {
             case .success(let items):
@@ -180,8 +195,12 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.showAlertWithTitle(title: "Oops!",
-                                        message: "Something went wrong")
+                    self.showAlertWithTitle(title: "Oops!", message: "Something went wrong"){
+                        if self.navigationController != nil
+                        {
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    }
                 }
                 print("\(self) retrive error on get flights: \(error)")
             }
@@ -202,8 +221,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         let request = URLRequest(url:url!)
         
         assetsApiModel.downloadAssets(parent: self, from:"Static", downloadURL: request, { (result) in
-            self.stopAnimate()
-            switch result {
+             switch result {
             case .success(let items):
                 do {
                 try FileManager.default.copyItem(at: items, to: documentsURL)
@@ -216,8 +234,14 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.showAlertWithTitle(title: "Oops!",
-                                        message: "Something went wrong")
+                    
+                    self.showAlertWithTitle(title: "Oops!", message: "Something went wrong"){
+                        if self.navigationController != nil
+                        {
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    }
+                    
                 }
                 print("\(self) retrive error on get flights: \(error)")
             }
@@ -251,8 +275,12 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.showAlertWithTitle(title: "Oops!",
-                                        message: "Something went wrong")
+                    self.showAlertWithTitle(title: "Oops!", message: "Something went wrong"){
+                        if self.navigationController != nil
+                        {
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    }
                 }
                 print("\(self) retrive error on get flights: \(error)")
             }
@@ -279,8 +307,12 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.showAlertWithTitle(title: "Oops!",
-                                        message: "Something went wrong")
+                    self.showAlertWithTitle(title: "Oops!", message: "Something went wrong"){
+                        if self.navigationController != nil
+                        {
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    }
                 }
                 print("\(self) retrive error on get flights: \(error)")
             }
@@ -312,8 +344,12 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.showAlertWithTitle(title: "Oops!",
-                                        message: "Something went wrong")
+                    self.showAlertWithTitle(title: "Oops!", message: "Something went wrong"){
+                        if self.navigationController != nil
+                        {
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    }
                 }
                 print("\(self) retrive error on get flights: \(error)")
             }
@@ -357,8 +393,12 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                 }
                 case .failure(let error):
                     DispatchQueue.main.async {
-                        self.showAlertWithTitle(title: "Oops!",
-                                            message: "Something went wrong")
+                        self.showAlertWithTitle(title: "Oops!", message: "Something went wrong"){
+                            if self.navigationController != nil
+                            {
+                                self.navigationController?.popViewController(animated: true)
+                            }
+                        }
                     }
                     print("\(self) retrive error on get flights: \(error)")
                 }
@@ -402,8 +442,12 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                 }
                 case .failure(let error):
                     DispatchQueue.main.async {
-                        self.showAlertWithTitle(title: "Oops!",
-                                            message: "Something went wrong")
+                        self.showAlertWithTitle(title: "Oops!", message: "Something went wrong"){
+                            if self.navigationController != nil
+                            {
+                                self.navigationController?.popViewController(animated: true)
+                            }
+                        }
                     }
                     print("\(self) retrive error on get flights: \(error)")
                 }
@@ -432,8 +476,12 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                 }
                 case .failure(let error):
                     DispatchQueue.main.async {
-                        self.showAlertWithTitle(title: "Oops!",
-                                            message: "Something went wrong")
+                        self.showAlertWithTitle(title: "Oops!", message: "Something went wrong"){
+                            if self.navigationController != nil
+                            {
+                                self.navigationController?.popViewController(animated: true)
+                            }
+                        }
                     }
                     print("\(self) retrive error on get flights: \(error)")
                 }
@@ -519,7 +567,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         
         self.currentZoomScale = zoomScale
 //        scrollView.minimumZoomScale = 1
-        scrollView.maximumZoomScale = 10.0
+        scrollView.maximumZoomScale = 2.0
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
         imageView.addSubview(imageHouse)
@@ -528,15 +576,124 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         self.scrollView.zoomScale = zoomScale;
         scrollView.alwaysBounceHorizontal = false
         scrollView.alwaysBounceVertical = false
-        scrollView.isDirectionalLockEnabled = true
+        scrollView.isDirectionalLockEnabled = false
         scrollView.bouncesZoom = false
         scrollView.bounces = false
+        //scrollView.isScrollEnabled = false
+        
+//        let longGesture = UILongPressGestureRecognizer.init(target: self, action: #selector(handleLongPress(_:)))
+//        longGesture.minimumPressDuration = 0.0
+//        longGesture.delaysTouchesBegan = false
+//        longGesture.delegate = self
+//        scrollView.addGestureRecognizer(longGesture)
+        
+        
+//        let panGesture = UIPanGestureRecognizer.init(target: self, action: #selector(handlePanGesture(_:)))
+//        panGesture.delegate = self // <--THIS
+//        panGesture.cancelsTouchesInView = false;
+//        panGesture.delaysTouchesBegan = false;
+//        panGesture.delaysTouchesEnded = false;
+//        scrollView.addGestureRecognizer(panGesture)
+        
+
         
 //        if UIDevice.current.userInterfaceIdiom == .pad {
 //            scrollView.zoomScale = 1.1
 //        }
         setUpOrienttaion()
         
+    }
+    
+    public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView){
+      print("scrollViewWillBeginDecelerating");
+      scrollView.setContentOffset(scrollView.contentOffset, animated: false);
+    }
+    
+    var startLocation : CGPoint!
+    
+    @objc func handleLongPress(_ sender: UILongPressGestureRecognizer) {
+        
+        
+        if sender.state == UIGestureRecognizerState.began {
+            self.startLocation = sender.location(in: imageView)
+        }
+        else if sender.state == UIGestureRecognizerState.changed {
+            
+            let endLocation = sender.location(in: imageView)
+            
+            let translation = CGPoint(x: endLocation.x - self.startLocation.x, y: endLocation.y - self.startLocation.y)
+            
+            if translation.y != 0 || translation.x != 0
+            {
+                var pointX = (scrollView.contentOffset.x  -  translation.x)
+                
+                var pointY = (scrollView.contentOffset.y - translation.y)
+                
+                
+                pointX = pointX < 0 ? 0 : pointX
+                pointX = pointX > (scrollView.contentSize.width - scrollView.bounds.width) ? ((scrollView.contentSize.width) - scrollView.bounds.width) : pointX
+            
+                pointY = pointY < 0 ? 0 : pointY
+                pointY = pointY > (scrollView.contentSize.height - scrollView.bounds.height) ? (scrollView.contentSize.height - scrollView.bounds.height) : pointY
+                
+                scrollView.setContentOffset(CGPoint(x: pointX, y:  pointY), animated: true)
+                
+            }
+            
+//            self.startLocation = sender.location(in: imageView)
+            
+        }
+        else if sender.state == UIGestureRecognizerState.ended {
+            
+            let endLocation = sender.location(in: imageView)
+            
+            let translation = CGPoint(x: endLocation.x - self.startLocation.x, y: endLocation.y - self.startLocation.y)
+            
+            if translation.y != 0 || translation.x != 0
+            {
+                var pointX = (scrollView.contentOffset.x  -  translation.x)
+                
+                var pointY = (scrollView.contentOffset.y - translation.y)
+                
+                
+                pointX = pointX < 0 ? 0 : pointX
+                pointX = pointX > (scrollView.contentSize.width - scrollView.bounds.width) ? ((scrollView.contentSize.width) - scrollView.bounds.width) : pointX
+            
+                pointY = pointY < 0 ? 0 : pointY
+                pointY = pointY > (scrollView.contentSize.height - scrollView.bounds.height) ? (scrollView.contentSize.height - scrollView.bounds.height) : pointY
+                
+                scrollView.setContentOffset(CGPoint(x: pointX, y:  pointY), animated: true)
+                
+            }
+            
+            
+        }
+
+        
+        
+    }
+    
+   
+   @objc func handlePanGesture(_ sender: UIPanGestureRecognizer) {
+     
+        let translation = sender.translation(in: imageView)
+        
+        if translation.y != 0 || translation.x != 0
+        {
+            var pointX = (scrollView.contentOffset.x  -  translation.x)
+            
+            var pointY = (scrollView.contentOffset.y - translation.y)
+            
+            
+            pointX = pointX < 0 ? 0 : pointX
+            pointX = pointX > (scrollView.contentSize.width - scrollView.bounds.width) ? ((scrollView.contentSize.width) - scrollView.bounds.width) : pointX
+        
+            pointY = pointY < 0 ? 0 : pointY
+            pointY = pointY > (scrollView.contentSize.height - scrollView.bounds.height) ? (scrollView.contentSize.height - scrollView.bounds.height) : pointY
+            
+            scrollView.setContentOffset(CGPoint(x: pointX, y:  pointY), animated: true)
+            
+        }
     }
     
     func setUpOrienttaion() {
@@ -582,7 +739,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         btnToggle.setTitle("See\nLess", for: .normal)
         btnToggle.titleLabel?.textAlignment = .center
         btnToggle.setTitleColor(UIColor.black, for: .normal)
-        btnToggle.titleLabel?.font = UIFont(name: "system", size: 8)
+        btnToggle.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         btnToggle.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         btnToggle.addTarget(self, action: #selector(actionToggleTapped), for: .touchUpInside)
         btnToggle.translatesAutoresizingMaskIntoConstraints = false
@@ -604,20 +761,24 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             self.view.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi*2))
             self.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.height, height: self.view.bounds.size.width)
             sender.isSelected = false
-//            if UIDevice.current.userInterfaceIdiom == .phone {
+            if UIDevice.current.userInterfaceIdiom == .phone {
                 scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
-//            }
+            }
+            
+            isOrientationToggled = false
         } else {
             sender.isSelected = true
             print(CGFloat(-Double.pi/2))
-            self.view.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi/2))
+            self.view.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
             self.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height)
-//            if UIDevice.current.userInterfaceIdiom == .phone {
+            if UIDevice.current.userInterfaceIdiom == .phone {
                 scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
-//            }
+            }
+            
+            isOrientationToggled = true
         }
         
-        isOrientationToggled = true
+        
     }
     
     @objc func actionToggleTapped(sender: UIButton) {
@@ -779,6 +940,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     func setUpStaticBGAssests (item: StaticAssets){
         let staticView = UIImageView()
         staticView.animationImages = arrStatic
+        staticView.layer.makeAnimationsPersistent()
         staticView.startAnimating()
         imageView.addSubview(staticView)
         staticView.frame = CGRect(x: item.xPosition!, y: item.yPosition!, width: item.width!, height: item.height!)
@@ -813,6 +975,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     func setUpAnimationAssests (item: AnimationFrames){
         let animationView = UIImageView()
         animationView.animationImages = arrImage
+        animationView.layer.makeAnimationsPersistent()
         animationView.animationDuration = 1.0
         animationView.startAnimating()
         imageView.addSubview(animationView)
@@ -844,6 +1007,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     func setUpTitleAssests (item: Title){
         let titleView = UIImageView()
         titleView.animationImages = arrTitle
+        titleView.layer.makeAnimationsPersistent()
         titleView.startAnimating()
         imageView.addSubview(titleView)
         titleView.frame = CGRect(x: item.xPosition!, y: item.yPosition!, width: item.width!, height: item.height!)
@@ -902,6 +1066,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         let animationView = UIImageView()
         animationView.animationImages = arrImage
         animationView.animationDuration = 2.0
+        animationView.layer.makeAnimationsPersistent()
         animationView.startAnimating()
         imageView.addSubview(animationView)
         animationView.frame = CGRect(x: item.xPosition!, y: item.yPosition!, width: item.width!, height: item.height!)
@@ -966,26 +1131,27 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         return imageView
     }
     
-    
-    public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+    public func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        
+        let scale = scrollView.zoomScale
         
         let statHeight = UIApplication.shared.statusBarFrame.height * -1
         
-        if scale > zoomScale  //&& UIDevice.current.userInterfaceIdiom == .phone
-        {
-            scrollView.contentInset = UIEdgeInsets(top: statHeight, left: 0, bottom: 0, right: 0)
-        }
-        else
-        {
-            if isOrientationToggled // && UIDevice.current.userInterfaceIdiom == .phone
-            {
-                scrollView.contentInset = UIEdgeInsets(top: statHeight, left: 0, bottom: 0, right: 0)
-            }
-            else
-            {
-                scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            }
-        }
+//        if scale > zoomScale  //&& UIDevice.current.userInterfaceIdiom == .phone
+//        {
+//            scrollView.contentInset = UIEdgeInsets(top: statHeight, left: 0, bottom: 0, right: 0)
+//        }
+//        else
+//        {
+//            if isOrientationToggled // && UIDevice.current.userInterfaceIdiom == .phone
+//            {
+//                scrollView.contentInset = UIEdgeInsets(top: statHeight, left: 0, bottom: 0, right: 0)
+//            }
+//            else
+//            {
+//                scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//            }
+//        }
         
         self.currentZoomScale = scale
         
@@ -1016,7 +1182,35 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                  captionView.frame = CGRect(x: xPosition, y: yPosition, width: self.captionView.frame.size.width, height: self.captionView.frame.size.height)
             }
         }
+        
+        if zoomScale < currentZoomScale
+        {
+            scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
+        }
+        else if zoomScale == currentZoomScale
+        {
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
+        
+//        let subView : UIView = self.imageView;
+//        let offsetX : CGFloat = (scrollView.bounds.size.width > scrollView.contentSize.width) ?
+//           (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
+//
+//        let  offsetY : CGFloat = (scrollView.bounds.size.height > scrollView.contentSize.height) ?
+//           (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
+//
+//        subView.center = CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX,
+//                                 y: scrollView.contentSize.height * 0.5 + offsetY);
+        
     }
+    
+    public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        
+        
+        
+        
+    }
+    
     
     
     //UIbutton event for the assests.
@@ -1068,23 +1262,9 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                    
 //                }
                 
-                if UIDevice.current.userInterfaceIdiom == .phone {
-                    let offsetSize = captionView.frame.origin.x * currentZoomScale
-                    
-                    let imgWidth = scrollView.contentSize.width * currentZoomScale
-                    
-                    if offsetSize < imgWidth
-                    {
-                        scrollView.setContentOffset(CGPoint(x: captionView.frame.origin.x * currentZoomScale, y: scrollView.contentOffset.y), animated: true)
-                    }
-                    else
-                    {
-                        scrollView.setContentOffset(CGPoint(x: scrollView.contentSize.width * currentZoomScale, y: scrollView.contentOffset.y), animated: true)
-                    }
-
-                }
+                
                 captionView.caption = filterArray![0].heading
-                captionView.desc = filterArray![0].description
+                captionView.desc = filterArray![0].description! + "\n\(filterArray![0].currentlyhappening!)"
                 captionView.deal = filterArray![0].deal
                 captionView.btnKnowMore.tag = sender.tag
                 captionView.btnKnowMore.addTarget(self, action: #selector(actionKnowMore), for: .touchUpInside)
@@ -1191,6 +1371,54 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                     
                      captionView.frame = CGRect(x: xPosition, y: yPosition, width: self.captionView.frame.size.width, height: self.captionView.frame.size.height)
                 }
+                
+                let scale =  1.0/self.currentZoomScale
+                
+                var pointX = (captionView.center.x - (((popupWidth * scale)/2) + 50)) * currentZoomScale
+                var pointY = (captionView.center.y - (((popupHeight * scale)/2) + 50)) * currentZoomScale //scrollView.contentOffset.y
+                    
+                pointX = pointX < 0 ? 0 : pointX
+                pointX = pointX > (scrollView.contentSize.width - scrollView.bounds.width) ? ((scrollView.contentSize.width) - scrollView.bounds.width) : pointX
+                
+                pointY = pointY < 0 ? 0 : pointY
+                pointY = pointY > (scrollView.contentSize.height - scrollView.bounds.height) ? (scrollView.contentSize.height - scrollView.bounds.height) : pointY
+                
+                scrollView.setContentOffset(CGPoint(x: pointX, y: pointY), animated: true)
+                
+//                if UIDevice.current.userInterfaceIdiom == .phone {
+//                    let offsetSize = captionView.center.x * currentZoomScale
+//
+//                    var  imgWidth = scrollView.contentSize.width * currentZoomScale
+//
+//                    if !isOrientationToggled
+//                    {
+//                        if offsetSize < imgWidth
+//                        {
+//
+//                            scrollView.setContentOffset(CGPoint(x: captionView.center.x * currentZoomScale, y: scrollView.contentOffset.y), animated: true)
+//                        }
+//                        else
+//                        {
+//                            scrollView.setContentOffset(CGPoint(x: scrollView.contentSize.width * currentZoomScale, y: scrollView.contentOffset.y), animated: true)
+//                        }
+//                    }
+//                    else
+//                    {
+//                        imgWidth = scrollView.contentSize.height * currentZoomScale
+//
+//                        if offsetSize < imgWidth
+//                        {
+//
+//                            scrollView.setContentOffset(CGPoint(x: captionView.center.x * currentZoomScale, y: scrollView.contentOffset.y), animated: true)
+//                        }
+//                        else
+//                        {
+//                            scrollView.setContentOffset(CGPoint(x: scrollView.contentSize.height * currentZoomScale, y: scrollView.contentOffset.y), animated: true)
+//                        }
+//                    }
+//                }
+                
+//                self.scrollView.zoom(toPoint: CGPoint(x: captionView.frame.origin.x , y: captionView.frame.origin.y) , scale: currentZoomScale, animated: true)
             }
         }
     }
@@ -1204,7 +1432,12 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     }
     
     @objc func actionKnowMore(sender: UIButton){
+        if captionView != nil {
+            captionView.removeFromSuperview()
+        }
         MapViewVC.delegate?.actionMore(pivotID: sender.tag)
     }
+    
 }
+
 

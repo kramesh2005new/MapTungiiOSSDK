@@ -45,8 +45,12 @@ extension UIViewController {
     ///   - completion: handler function to perform after presenting alert
     func showAlertWithTitle(title: String?, message: String?, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: completion)
+//        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action) in
+            completion!()
+        }))
+        //self.present(alert, animated: true, completion: completion)
+        self.present(alert, animated: true, completion: nil)
     }    
     /// Check the internet connection in the application
     func checkReachable() -> Bool {
@@ -58,4 +62,17 @@ extension UIViewController {
         let canConnectWithoutUserInteraction = canConnectAutomatically && !flags.contains(.interventionRequired)
         return (isReachable && (!needsConnection || canConnectWithoutUserInteraction))
     }
+}
+
+extension ParentViewController: UIGestureRecognizerDelegate {
+    
+    private func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+         return true
+    }
+    
+    private func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+    shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
 }

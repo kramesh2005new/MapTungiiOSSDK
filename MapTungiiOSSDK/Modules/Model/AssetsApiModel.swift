@@ -31,14 +31,14 @@ final class AssetsApiModel {
             case .success(let data):
                 do {
                     let items = try JSONDecoder().decode(AssestsModel.self, from: data)
-                    parentViewController?.stopAnimate()
+                    //parentViewController?.stopAnimate()
                     completion(.success(items))
                 } catch {
-                    parentViewController?.stopAnimate()
+                    //parentViewController?.stopAnimate()
                     completion(.failure(error))
                 }
             case .failure(let error):
-                parentViewController?.stopAnimate()
+                //parentViewController?.stopAnimate()
                 completion(.failure(error))
             }
         }
