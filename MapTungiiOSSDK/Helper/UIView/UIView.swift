@@ -150,13 +150,13 @@ public extension CALayer {
     }
     
     func pauseAnimation(){
-        var pausedTime = self.convertTime(CACurrentMediaTime(), from: nil)
+        let pausedTime = self.convertTime(CACurrentMediaTime(), from: nil)
       self.speed = 0.0
       self.timeOffset = pausedTime
     }
     
     func resumeAnimation(){
-      var pausedTime = self.timeOffset
+      let pausedTime = self.timeOffset
       self.speed = 1.0
       self.timeOffset = 0.0
       self.beginTime = 0.0

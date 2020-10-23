@@ -1135,7 +1135,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         
         let scale = scrollView.zoomScale
         
-        let statHeight = UIApplication.shared.statusBarFrame.height * -1
+        //let statHeight = UIApplication.shared.statusBarFrame.height * -1
         
 //        if scale > zoomScale  //&& UIDevice.current.userInterfaceIdiom == .phone
 //        {
