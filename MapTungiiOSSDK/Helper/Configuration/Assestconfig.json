@@ -204,7 +204,7 @@
         },
         {
             "name": "cafelaughingdove",
-            "xPosition": 880,
+            "xPosition": 950,
             "yPosition": 250,
             "width": 300,
             "height": 42,
@@ -222,8 +222,8 @@
         },
         {
             "name": "infinitypool",
-            "xPosition": 1200,
-            "yPosition": 215,
+            "xPosition": 1150,
+            "yPosition": 310,
             "width": 98,
             "height": 69,
             "id": 0,
@@ -948,7 +948,7 @@
             "yPosition": 485,
             "width": 20,
             "height": 28,
-            "animate": 0
+            "animate": 1
         },
         {
             "name": "Mom_Kid_Walk 3-4",
@@ -1258,7 +1258,7 @@
             "yPosition": 485,
             "width": 20,
             "height": 28,
-            "animate": 0
+            "animate": 1
         },
         {
             "name": "Mom_Kid_Walk 3-4",

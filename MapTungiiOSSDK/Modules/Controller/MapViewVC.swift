@@ -43,6 +43,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     var popupWidth : CGFloat = 320
     var popupHeight : CGFloat = 160
     
+    var birdTimer: Timer?
    
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,6 +113,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                         self.getTreeBunchConfiguration()
                         self.treeBunchEffectToLoad = 6
                         self.getTreeBunchConfiguration()
+                        self.setUpStaticHouseAssests()
                         self.getStaicAssestConfiguration()
                         self.bgEffectToLoad = 2
                         self.getBGEffectConfiguration()
@@ -163,11 +165,18 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                     
                     let defaults = UserDefaults.standard
                     defaults.set(self.assetsResponse.data?.version, forKey: "version")
+                    
+                    self.birdTimer = Timer.scheduledTimer(timeInterval: 40, target: self, selector: #selector(self.runTimedCode), userInfo: nil, repeats: true)
                 }
             case .failure(let error):
                 print("\(self) retrive error on get flights: \(error)")
             }
         })
+    }
+    
+    @objc func runTimedCode()
+    {
+        self.geBirdAnimationConfiguration()
     }
     
     func downloadAndLoadMapBg()
@@ -434,6 +443,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                         }
                         else if self.treeBunchEffectToLoad == 6
                         {
+                            self.setUpStaticHouseAssests()
                             self.callDownloadStaticAssets()
                         }
                         
@@ -512,6 +522,22 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
           print("Something went wrong")
         }
     }
+    
+    func setUpStaticHouseAssests(){
+        
+        do{
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            
+            let houseURL = documentsURL.appendingPathComponent("map_houses.png")
+            //            let housefileURLs = URL(fileURLWithPath: houseURL.absoluteString)
+            let houseimage = UIImage(data: try Foundation.Data(contentsOf: houseURL))
+                imageHouse = UIImageView(image: houseimage)
+            }catch{
+                print("Error while enumerating files in the Document Directory")
+            }
+        imageHouse.frame = CGRect(x: 8, y: 0, width: imageHouse.frame.width, height: imageHouse.frame.height)
+        imageView.addSubview(imageHouse)
+    }
   
     // To setup the static assests from the document directory and image scrollview zoom and pinch gesture
     func setUpStaticAssests(){
@@ -570,7 +596,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         scrollView.maximumZoomScale = 2.0
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
-        imageView.addSubview(imageHouse)
+        //imageView.addSubview(imageHouse)
         scrollView.addSubview(imageView)
         view.addSubview(scrollView)
         self.scrollView.zoomScale = zoomScale;
@@ -580,6 +606,11 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         scrollView.bouncesZoom = false
         scrollView.bounces = false
         //scrollView.isScrollEnabled = false
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            automaticallyAdjustsScrollViewInsets = false
+        }
         
 //        let longGesture = UILongPressGestureRecognizer.init(target: self, action: #selector(handleLongPress(_:)))
 //        longGesture.minimumPressDuration = 0.0
@@ -736,7 +767,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         btnToggle.layer.cornerRadius = 25
         btnToggle.titleLabel?.numberOfLines = 0
         btnToggle.titleLabel?.lineBreakMode = .byWordWrapping
-        btnToggle.setTitle("See\nLess", for: .normal)
+        btnToggle.setTitle("SEE\nLESS", for: .normal)
         btnToggle.titleLabel?.textAlignment = .center
         btnToggle.setTitleColor(UIColor.black, for: .normal)
         btnToggle.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
@@ -761,9 +792,9 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             self.view.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi*2))
             self.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.height, height: self.view.bounds.size.width)
             sender.isSelected = false
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
-            }
+//            if UIDevice.current.userInterfaceIdiom == .phone {
+//                scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
+//            }
             
             isOrientationToggled = false
         } else {
@@ -771,9 +802,9 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             print(CGFloat(-Double.pi/2))
             self.view.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
             self.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height)
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
-            }
+//            if UIDevice.current.userInterfaceIdiom == .phone {
+//                scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
+//            }
             
             isOrientationToggled = true
         }
@@ -791,7 +822,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             sender.isSelected = false
             sender.titleLabel?.numberOfLines = 0
             sender.titleLabel?.lineBreakMode = .byWordWrapping
-            sender.setTitle("See\nLess", for: .normal)
+            sender.setTitle("SEE\nLESS", for: .normal)
             sender.titleLabel?.textAlignment = .center
             sender.setTitleColor(UIColor.black, for: .normal)
         } else {
@@ -802,7 +833,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             }
             sender.titleLabel?.numberOfLines = 0
             sender.titleLabel?.lineBreakMode = .byWordWrapping
-            sender.setTitle("See\nAll", for: .normal)
+            sender.setTitle("SEE\nALL", for: .normal)
             sender.titleLabel?.textAlignment = .center
             sender.setTitleColor(UIColor.black, for: .normal)
             sender.isSelected = true            
@@ -1086,6 +1117,8 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                 self.animation(viewAnimation: animationView, x:10, y:0, time: 3)
             }else if item.name == "Pool_Girl_3" {
                 self.animation(viewAnimation: animationView, x:20, y:0, time: 3)
+            }else if item.name == "Pool_Girl_4" && item.xPosition == 1225 {
+                self.animation(viewAnimation: animationView, x:-12, y:3, time: 3)
             }else if item.name == "Pool_Girl_4" {
                 self.animation(viewAnimation: animationView, x:15, y:10, time: 3)
             }else if item.name == "Mom_Kid_Walk 3-4" {
@@ -1183,14 +1216,17 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             }
         }
         
-        if zoomScale < currentZoomScale
-        {
-            scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
-        }
-        else if zoomScale == currentZoomScale
-        {
-            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        }
+//        if UIDevice.current.userInterfaceIdiom == .phone
+//        {
+//            if zoomScale < currentZoomScale
+//            {
+//                scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
+//            }
+//            else if zoomScale + 0.2 <= currentZoomScale || zoomScale == currentZoomScale
+//            {
+//                scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//            }
+//        }
         
 //        let subView : UIView = self.imageView;
 //        let offsetX : CGFloat = (scrollView.bounds.size.width > scrollView.contentSize.width) ?

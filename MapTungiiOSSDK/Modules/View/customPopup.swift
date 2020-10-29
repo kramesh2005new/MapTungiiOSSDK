@@ -10,7 +10,7 @@ import UIKit
 
 class customPopup: UIView {
     @IBOutlet var contentView: UIView!
-    @IBOutlet weak var lblCaption: UILabel!
+    @IBOutlet weak var lblCaption: VerticalAlignLabel!
     @IBOutlet weak var lbldescription: UILabel!
     @IBOutlet weak var lblDeal: UILabel!
     @IBOutlet weak var imgIcon: UIImageView!
@@ -64,6 +64,7 @@ class customPopup: UIView {
         self.addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        lblCaption.verticalAlignment = .bottom
         
         var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         documentsURL = documentsURL.appendingPathComponent("Static_BG/Popup")
