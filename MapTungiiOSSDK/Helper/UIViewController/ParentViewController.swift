@@ -83,7 +83,7 @@ extension ParentViewController {
                DispatchQueue.main.asyncAfter(deadline: .now() ) {
                 
                 self.scrollViewStatic = UIScrollView(frame: self.view.bounds)
-                self.imgStaticBg  = UIImageView(image:  UIImage(named: "temp_bg_image.jpg", in: Bundle(for: MapViewVC.self),       compatibleWith: nil))
+                self.imgStaticBg  = UIImageView(image:  UIImage(named: "temp_bg_image", in: Bundle(for: MapViewVC.self),       compatibleWith: nil))
                             
                // self.imgStaticBg.frame = CGRect(x: 0, y: 0, width: (self.imgStaticBg.image?.size.width)!, height: (self.imgStaticBg.image?.size.height)!)
                 self.scrollViewStatic.contentSize = self.imgStaticBg.bounds.size
