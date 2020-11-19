@@ -14,7 +14,7 @@ public protocol CallbackSDK: class {
     func actionMore(pivotID: Int)
 }
 
-public class MapViewVC: ParentViewController, UIScrollViewDelegate {
+public class MapViewVC: ParentViewController {
     
     let assetsApiModel = AssetsApiModel(apiClient: APIClient())
     var assetsResponse: AssestsModel!
@@ -35,16 +35,16 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     var zoomScale : CGFloat = 1.0
     var currentZoomScale : CGFloat = 1.0
     
-    var isOrientationToggled : Bool = false
+    var isOrientationToggled : Bool = true
     
     var bgEffectToLoad: Int = 1
     var treeBunchEffectToLoad: Int = 1
     
-    var popupWidth : CGFloat = 320
-    var popupHeight : CGFloat = 160
+    var popupWidth : CGFloat = 300
+    var popupHeight : CGFloat = 140
     
     var birdTimer: Timer?
-   
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
@@ -97,35 +97,46 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             switch result {
             case .success(let items):
                 DispatchQueue.main.async {
+                    
                     self.assetsResponse = items
                     if (self.versionNo == self.assetsResponse.data?.version){
-                        self.setUpStaticAssests()
-                        self.getAnimationConfiguration()
-                        self.bgEffectToLoad = 5
-                        self.getBGEffectConfiguration()
-                        self.treeBunchEffectToLoad = 1
-                        self.getTreeBunchConfiguration()
-                        self.treeBunchEffectToLoad = 2
-                        self.getTreeBunchConfiguration()
-                        self.treeBunchEffectToLoad = 3
-                        self.getTreeBunchConfiguration()
-                        self.treeBunchEffectToLoad = 4
-                        self.getTreeBunchConfiguration()
-                        self.treeBunchEffectToLoad = 6
-                        self.getTreeBunchConfiguration()
-                        self.setUpStaticHouseAssests()
-                        self.getStaicAssestConfiguration()
-                        self.bgEffectToLoad = 2
-                        self.getBGEffectConfiguration()
-                        self.bgEffectToLoad = 3
-                        self.getBGEffectConfiguration()
-                        self.bgEffectToLoad = 4
-                        self.getBGEffectConfiguration()
-                        self.callPivotPointWebService()
-//                        self.geBirdAnimationConfiguration()
-//                        self.getTitleAssestConfiguration()
+                        
+                        UIView.animate(withDuration: 0.5, animations: {
+                                          
+                        self.view.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
+                            self.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height)
+                        }){ (finished) in
+                           
+                            self.setUpStaticAssests()
+                            self.getAnimationConfiguration()
+                            self.bgEffectToLoad = 5
+                            self.getBGEffectConfiguration()
+                            self.treeBunchEffectToLoad = 1
+                            self.getTreeBunchConfiguration()
+                            self.treeBunchEffectToLoad = 2
+                            self.getTreeBunchConfiguration()
+                            self.treeBunchEffectToLoad = 3
+                            self.getTreeBunchConfiguration()
+                            self.treeBunchEffectToLoad = 4
+                            self.getTreeBunchConfiguration()
+                            self.treeBunchEffectToLoad = 6
+                            self.getTreeBunchConfiguration()
+                            self.setUpStaticHouseAssests()
+                            self.getStaicAssestConfiguration()
+                            self.bgEffectToLoad = 2
+                            self.getBGEffectConfiguration()
+                            self.bgEffectToLoad = 3
+                            self.getBGEffectConfiguration()
+                            self.bgEffectToLoad = 4
+                            self.getBGEffectConfiguration()
+                            self.callPivotPointWebService()
+                            //                        self.geBirdAnimationConfiguration()
+                            //                        self.getTitleAssestConfiguration()
+                            
+                        }
                     }else{
 //                        self.callDownloadStaticAssets()
+                        self.showStaticMap()
                         self.downloadAndLoadMapBg()
                     }
                     
@@ -158,11 +169,14 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
             switch result {
             case .success(let items):
                 DispatchQueue.main.async {
+                    self.setUpOrienttaion()
                     self.pivotResponse = items
                     //self.getPivotPointConfiguration()
                     self.geBirdAnimationConfiguration()
                     self.getTitleAssestConfiguration()
-                    
+                    self.progressView.progress = 1.0
+                    self.progressView.isHidden = true
+                    self.progressView.removeFromSuperview()
                     let defaults = UserDefaults.standard
                     defaults.set(self.assetsResponse.data?.version, forKey: "version")
                     
@@ -170,6 +184,9 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                 }
             case .failure(let error):
                 print("\(self) retrive error on get flights: \(error)")
+                DispatchQueue.main.async {
+                    self.setUpOrienttaion()
+                }
             }
         })
     }
@@ -236,6 +253,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                 try FileManager.default.copyItem(at: items, to: documentsURL)
                 DispatchQueue.main.async {
                     self.setUpStaticAssests()
+                    self.progressView.progress = 0.10
                     self.callDownloadBGEffects1()
                    //self.callDownloadAnimationAssets()
                     }}catch (let writeError) {
@@ -276,6 +294,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                 DispatchQueue.main.async {
                    self.unZipAssets(filePath : documentsURL, from: "Static")
                     self.getStaicAssestConfiguration()
+                    self.progressView.progress = 0.70
                     self.bgEffectToLoad = 2
                     self.callDownloadBGEffects()
 //                   self.callDownloadAnimationAssets()
@@ -346,6 +365,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                 DispatchQueue.main.async {
                    self.unZipAssets(filePath : documentsURL, from: "Animation")
                     self.getAnimationConfiguration()
+                    self.progressView.progress = 0.15
                     self.bgEffectToLoad = 5
                     self.callDownloadBGEffects()
                     }}catch (let writeError) {
@@ -384,6 +404,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                         self.getBGEffectConfiguration()
                         if self.bgEffectToLoad == 5
                         {
+                            self.progressView.progress = 0.20
                             self.callDownloadTreeBunchEffects()
                         }
                         else if self.bgEffectToLoad < 4
@@ -393,8 +414,18 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                         }
                         else if self.bgEffectToLoad == 4
                         {
+                            self.progressView.progress = 0.85
                             self.callDownloadTungiPopupImages()
                             
+                        }
+                        
+                        if self.bgEffectToLoad == 3
+                        {
+                            self.progressView.progress = 0.80
+                        }
+                        else if self.bgEffectToLoad == 2
+                        {
+                            self.progressView.progress = 0.80
                         }
                         
                         }}catch (let writeError) {
@@ -431,6 +462,17 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                     DispatchQueue.main.async {
                        self.unZipAssets(filePath : documentsURL, from: "Animation")
                         self.getTreeBunchConfiguration()
+                        
+                        if self.treeBunchEffectToLoad == 2
+                        {
+                            self.progressView.progress = 0.30
+                        }
+                         if self.treeBunchEffectToLoad == 3
+                         {
+                            self.progressView.progress = 0.40
+                            self.hideStaticMap()
+                            
+                        }
                         if self.treeBunchEffectToLoad <= 3
                         {
                             self.treeBunchEffectToLoad += 1
@@ -438,11 +480,13 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                         }
                         else if self.treeBunchEffectToLoad == 4
                         {
+                            self.progressView.progress = 0.50
                             self.treeBunchEffectToLoad += 2
                             self.callDownloadTreeBunchEffects()
                         }
                         else if self.treeBunchEffectToLoad == 6
                         {
+                            self.progressView.progress = 0.60
                             self.setUpStaticHouseAssests()
                             self.callDownloadStaticAssets()
                         }
@@ -480,6 +524,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                     try FileManager.default.copyItem(at: items, to: documentsURL)
                     DispatchQueue.main.async {
                        self.unZipAssets(filePath : documentsURL, from: "Animation")
+                        self.progressView.progress = 0.95
                         self.callPivotPointWebService()
                         }}catch (let writeError) {
                     print("Error creating a file \(documentsURL) : \(writeError)")
@@ -563,13 +608,13 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
 //            scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
             scrollView.contentSize = imageView.bounds.size
             scrollView.setContentOffset(
-                CGPoint(x: scrollView.contentSize.width - scrollView.bounds.size.width, y: 0),
+                CGPoint(x: scrollView.contentSize.width - scrollView.bounds.size.width, y: scrollView.contentSize.height - scrollView.bounds.size.height),
             animated: true)
         }else{
 //            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             scrollView.contentSize = imageView.bounds.size
             scrollView.setContentOffset(
-                CGPoint(x: scrollView.contentSize.width - scrollView.bounds.size.width, y: 100),
+                CGPoint(x: scrollView.contentSize.width - scrollView.bounds.size.width, y: scrollView.contentSize.height - scrollView.bounds.size.height),
             animated: true)
         }
         
@@ -582,7 +627,14 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
 //           let scale = min(widthScale,heightScale)
 //           scrollView.minimumZoomScale = scale
         
-        zoomScale = self.view.bounds.size.height / self.imageView.image!.size.height;
+//        if isOrientationToggled
+//        {
+            zoomScale = self.view.bounds.size.width / self.imageView.image!.size.height;
+//        }
+//        else
+//        {
+//            zoomScale = self.view.bounds.size.height / self.imageView.image!.size.height;
+//        }
 
 //        if (zoomScale > 1) {
 //            self.scrollView.minimumZoomScale = 1;
@@ -599,6 +651,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         //imageView.addSubview(imageHouse)
         scrollView.addSubview(imageView)
         view.addSubview(scrollView)
+        view.sendSubview(toBack: scrollView)
         self.scrollView.zoomScale = zoomScale;
         scrollView.alwaysBounceHorizontal = false
         scrollView.alwaysBounceVertical = false
@@ -631,7 +684,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
 //        if UIDevice.current.userInterfaceIdiom == .pad {
 //            scrollView.zoomScale = 1.1
 //        }
-        setUpOrienttaion()
+      //  setUpOrienttaion()
         
     }
     
@@ -741,6 +794,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         btnOrientation.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -16).isActive = true
         btnOrientation.widthAnchor.constraint(equalToConstant: 50).isActive = true
         btnOrientation.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        btnOrientation.isSelected = true
         setUpBackButton()
     }
     
@@ -1043,7 +1097,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
         imageView.addSubview(titleView)
         titleView.frame = CGRect(x: item.xPosition!, y: item.yPosition!, width: item.width!, height: item.height!)
         
-        if item.value == 0 {
+        if item.value == 0 && item.name != "entry"{
             titleView.tag = 1000
         }
         
@@ -1160,11 +1214,24 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
     
         
     // Zoom the image using gesture and pan the image
-    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return imageView
+    public override func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        
+        if scrollView == scrollViewStatic
+        {
+            return imgStaticBg
+        }
+        else
+        {
+            return imageView
+        }
     }
     
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        
+        if scrollView == scrollViewStatic
+        {
+            return
+        }
         
         let scale = scrollView.zoomScale
         
@@ -1300,7 +1367,7 @@ public class MapViewVC: ParentViewController, UIScrollViewDelegate {
                 
                 
                 captionView.caption = filterArray![0].heading
-                captionView.desc = filterArray![0].description! + "\n\(filterArray![0].currentlyhappening!)"
+                captionView.desc = "\(filterArray![0].currentlyhappening!)" //filterArray![0].description! + "\n\(filterArray![0].currentlyhappening!)"
                 captionView.deal = filterArray![0].deal
                 captionView.btnKnowMore.tag = sender.tag
                 captionView.btnKnowMore.addTarget(self, action: #selector(actionKnowMore), for: .touchUpInside)

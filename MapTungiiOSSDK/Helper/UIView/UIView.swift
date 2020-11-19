@@ -22,6 +22,13 @@ extension UIView {
             self.layer.add(rotateAnimation, forKey: nil)
         }
     }
+    
+    func setCorner(radius:CGFloat, borderWidth:CGFloat = 0, color: UIColor = .clear){
+        self.layer.cornerRadius = radius
+        self.layer.borderColor = color.cgColor
+        self.layer.borderWidth = borderWidth
+        self.clipsToBounds = true
+    }
 }
 
 //// Story board Extra Feature for create border radius, border width and border Color

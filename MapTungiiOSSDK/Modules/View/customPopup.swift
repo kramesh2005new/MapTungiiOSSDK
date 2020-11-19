@@ -16,6 +16,7 @@ class customPopup: UIView {
     @IBOutlet weak var imgIcon: UIImageView!
     @IBOutlet weak var imgBG: UIImageView!
     @IBOutlet weak var btnKnowMore: UIButton!
+    @IBOutlet weak var btnClose: UIButton!
     
     var caption: String? {
         get { return lblCaption?.text }
@@ -80,6 +81,10 @@ class customPopup: UIView {
         
     }
     
+    @IBAction func actionClose(_ sender: Any) {
+        self.removeFromSuperview()
+    }
+    
     func getDirectoryPath() -> URL
     {
         let documentDirectoryPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString)
@@ -103,5 +108,7 @@ class customPopup: UIView {
         lblDeal.frame = CGRect(x: lblDeal.frame.origin.x, y: lblDeal.frame.origin.y + 25, width: lblDeal.frame.size.width, height: lblDeal.frame.size.height)
         imgIcon.frame = CGRect(x: imgIcon.frame.origin.x + xMove, y: imgIcon.frame.origin.y + 25, width: imgIcon.frame.size.width, height: imgIcon.frame.size.height)
         btnKnowMore.frame = CGRect(x: btnKnowMore.frame.origin.x, y: btnKnowMore.frame.origin.y + 25, width: btnKnowMore.frame.size.width, height: btnKnowMore.frame.size.height)
+        
+        btnClose.frame = CGRect(x: btnClose.frame.origin.x, y: btnClose.frame.origin.y + 25, width: btnClose.frame.size.width, height: btnClose.frame.size.height)
     }
 }

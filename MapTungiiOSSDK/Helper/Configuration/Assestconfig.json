@@ -141,8 +141,8 @@
         },
         {
             "name": "entry",
-            "xPosition": 1241,
-            "yPosition": 896,
+            "xPosition": 1195,
+            "yPosition": 936,
             "width": 108,
             "height": 42,
             "id": 0,
@@ -185,10 +185,10 @@
             "value": 1
         },
         {
-            "name": "pool",
+            "name": "laggon_pool",
             "xPosition": 1191,
             "yPosition": 429,
-            "width": 109,
+            "width": 190,
             "height": 40,
             "id": 5,
             "value": 1
@@ -199,6 +199,24 @@
             "yPosition": 359,
             "width": 123,
             "height": 68,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "kids_pool",
+            "xPosition": 1120,
+            "yPosition": 484,
+            "width": 121,
+            "height": 40,
+            "id": 0,
+            "value": 0
+        },
+        {
+            "name": "shopping_arcade",
+            "xPosition": 1240,
+            "yPosition": 530,
+            "width": 200,
+            "height": 40,
             "id": 0,
             "value": 0
         },
@@ -396,7 +414,7 @@
             "height": 40
         },
         {
-            "name": "Pool",
+            "name": "lagoon_pool",
             "btnxPosition": 1240,
             "btnyPosition": 390,
             "btnheight": 40,
