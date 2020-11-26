@@ -76,57 +76,84 @@ extension ParentViewController {
                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                     self.imgStaticBg.isHidden = false
                    self.imgEntering.isHidden = false
-                self.scrollViewStatic.isHidden = false
+//                self.scrollViewStatic.isHidden = false
                 self.progressView.isHidden = false
                }
                
                DispatchQueue.main.asyncAfter(deadline: .now() ) {
                 
                 self.scrollViewStatic = UIScrollView(frame: self.view.bounds)
+                //self.scrollViewStatic.backgroundColor = UIColor.blue
                 self.imgStaticBg  = UIImageView(image:  UIImage(named: "temp_bg_image", in: Bundle(for: MapViewVC.self),       compatibleWith: nil))
                             
-               // self.imgStaticBg.frame = CGRect(x: 0, y: 0, width: (self.imgStaticBg.image?.size.width)!, height: (self.imgStaticBg.image?.size.height)!)
-                self.scrollViewStatic.contentSize = self.imgStaticBg.bounds.size
+                self.imgStaticBg.frame = self.view.bounds //CGRect(x: 0, y: 0, width: (self.imgStaticBg.image?.size.width)!, height: (self.imgStaticBg.image?.size.height)!)
+//                self.scrollViewStatic.contentSize = self.imgStaticBg.bounds.size
                 
                             
                 //self.scrollViewStatic.backgroundColor = UIColor.yellow
-                self.scrollViewStatic.translatesAutoresizingMaskIntoConstraints = false;
-                self.scrollViewStatic.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin, .flexibleTopMargin, .flexibleRightMargin, .flexibleLeftMargin]
-                
-                let  zoomScale = self.view.bounds.size.width / self.imgStaticBg.image!.size.height;
-                //        }
-                //        else
-                //        {
-                //            zoomScale = self.view.bounds.size.height / self.imageView.image!.size.height;
-                //        }
-
-                //        if (zoomScale > 1) {
-                //            self.scrollView.minimumZoomScale = 1;
-                //            zoomScale = 1
-                //        }
-
-                        self.scrollViewStatic.minimumZoomScale = zoomScale;
-                
-                
-                  // self.imgStaticBg = UIImageView(frame: self.view.bounds) // CGRect(x: 0, y: 0, width: self.view.frame.size.height, height: self.view.frame.size.width))
-                   self.scrollViewStatic.center = self.view.center
-                   //self.imgStaticBg.image = UIImage(named: "temp_bg_image.jpg", in: Bundle(for: MapViewVC.self),       compatibleWith: nil) // UIImage(named: "toggle.png") //temp_bg_image.jpg
-                   //self.imgStaticBg.contentMode = .scaleToFill
-                   //self.imgStaticBg.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin, .flexibleTopMargin, .flexibleRightMargin, .flexibleLeftMargin]
-                   self.scrollViewStatic.addSubview(self.imgStaticBg)
+//                self.scrollViewStatic.translatesAutoresizingMaskIntoConstraints = false;
+//                self.scrollViewStatic.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin, .flexibleTopMargin, .flexibleRightMargin, .flexibleLeftMargin]
+//
+//                var  zoomScale = self.view.bounds.size.width / self.imgStaticBg.image!.size.height;
+//                var isChanged : Bool = false
+//
+//                if (self.imgStaticBg.image!.size.width * zoomScale) < self.view.bounds.size.height
+//                {
+//                    zoomScale = self.view.bounds.size.height / self.imgStaticBg.image!.size.width;
+//                    isChanged = true
+//                }
+//                //        }
+//                //        else
+//                //        {
+//                //            zoomScale = self.view.bounds.size.height / self.imageView.image!.size.height;
+//                //        }
+//
+//                //        if (zoomScale > 1) {
+//                //            self.scrollView.minimumZoomScale = 1;
+//                //            zoomScale = 1
+//                //        }
+//
+//                        self.scrollViewStatic.minimumZoomScale = zoomScale;
+//
+//
+//                  // self.imgStaticBg = UIImageView(frame: self.view.bounds) // CGRect(x: 0, y: 0, width: self.view.frame.size.height, height: self.view.frame.size.width))
+//                   self.scrollViewStatic.center = self.view.center
+//                   //self.imgStaticBg.image = UIImage(named: "temp_bg_image.jpg", in: Bundle(for: MapViewVC.self),       compatibleWith: nil) // UIImage(named: "toggle.png") //temp_bg_image.jpg
+                   self.imgStaticBg.contentMode = .scaleAspectFill
+                   self.imgStaticBg.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin, .flexibleTopMargin, .flexibleRightMargin, .flexibleLeftMargin]
+//                   //self.scrollViewStatic.addSubview(self.imgStaticBg)
                    self.imgStaticBg.isHidden = true
-                self.scrollViewStatic.maximumZoomScale = 2.0
-                self.scrollViewStatic.showsVerticalScrollIndicator = false
-                self.scrollViewStatic.showsHorizontalScrollIndicator = false
-                self.scrollViewStatic.delegate = self
-                self.scrollViewStatic.zoomScale = zoomScale;
-                self.view.addSubview(self.scrollViewStatic)
+//                self.scrollViewStatic.maximumZoomScale = 2.0
+//                self.scrollViewStatic.showsVerticalScrollIndicator = false
+//                self.scrollViewStatic.showsHorizontalScrollIndicator = false
+//                self.scrollViewStatic.delegate = self
+//                self.scrollViewStatic.zoomScale = zoomScale;
+                //self.view.addSubview(self.scrollViewStatic)
+                self.view.addSubview(self.imgStaticBg)
                    
-                self.scrollViewStatic.setContentOffset(
-                CGPoint(x: self.scrollViewStatic.contentSize.width - self.scrollViewStatic.bounds.size.width, y: 0),
-                            animated: true)
+                
+                
+//                if (self.view.bounds.size.width / zoomScale) < self.imgStaticBg.image!.size.width
+//                {
+//                    self.scrollViewStatic.setContentOffset(
+//                    CGPoint(x: self.scrollViewStatic.contentSize.width - self.scrollViewStatic.bounds.size.width, y:  (self.scrollViewStatic.contentSize.height / zoomScale) - self.scrollViewStatic.bounds.size.height),
+//                                animated: true)
+//                }
+                
+//                if isChanged
+//                {
+//                    self.scrollViewStatic.setContentOffset(
+//                    CGPoint(x: self.scrollViewStatic.contentSize.width - self.scrollViewStatic.bounds.size.width, y:  73 ),
+//                                animated: true)
+//                }
+//                else
+//                {
+//                    self.scrollViewStatic.setContentOffset(
+//                    CGPoint(x: self.scrollViewStatic.contentSize.width - self.scrollViewStatic.bounds.size.width, y:  0),
+//                                animated: true)
+//                }
                    
-                   self.imgEntering = UIImageView(frame: CGRect(x:self.imgStaticBg.bounds.size.width - 700 , y: self.imgStaticBg.bounds.size.height - 90, width: 523, height: 80))
+                   self.imgEntering = UIImageView(frame: CGRect(x:(self.view.bounds.size.width - 262) / 2 , y: self.view.bounds.size.height - 50, width: 262, height: 40))
 //
 //                 if UIDevice.current.userInterfaceIdiom == .pad {
                     
@@ -137,8 +164,8 @@ extension ParentViewController {
                 
                    self.imgEntering.image = UIImage(named: "entring1.png", in: Bundle(for: MapViewVC.self),       compatibleWith: nil)
                    
-                  // self.imgEntering.autoresizingMask = [ .flexibleBottomMargin, .flexibleTopMargin, .flexibleRightMargin, .flexibleLeftMargin]
-                   self.imgStaticBg.addSubview(self.imgEntering)
+                   self.imgEntering.autoresizingMask = [ .flexibleBottomMargin, .flexibleTopMargin, .flexibleRightMargin, .flexibleLeftMargin]
+                   self.view.addSubview(self.imgEntering)
                    self.imgEntering.isHidden = true
                    //self.view.bringSubview(toFront: self.imgEntering) self.view.bounds.size.height - 35  self.view.bounds.size.width - 220
                    
@@ -182,7 +209,7 @@ extension ParentViewController {
         if self.imgStaticBg != nil
         {
             self.stopAnimate()
-            
+            self.imgEntering.isHidden = true
             UIView.animate(withDuration: 1.0, delay: 0.0, options: UIViewAnimationOptions.curveEaseIn, animations: {
                     
                    // HERE
@@ -194,8 +221,8 @@ extension ParentViewController {
              }) { (finished) in
                
                 self.imgStaticBg.removeFromSuperview()
-                self.scrollViewStatic.removeFromSuperview()
-                
+                //self.scrollViewStatic.removeFromSuperview()
+                self.imgEntering.removeFromSuperview()
             }
         }
     }

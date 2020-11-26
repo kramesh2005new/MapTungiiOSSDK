@@ -807,7 +807,14 @@ public class MapViewVC: ParentViewController {
         btnBack.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(btnBack)
         btnBack.bringSubview(toFront: imageView)
-        btnBack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 16).isActive = true
+        if UIDevice.current.hasNotch
+        {
+            btnBack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 40).isActive = true
+        }
+        else
+        {
+            btnBack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 16).isActive = true
+        }
         btnBack.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 50).isActive = true
         btnBack.widthAnchor.constraint(equalToConstant: 40).isActive = true
         btnBack.heightAnchor.constraint(equalToConstant: 40).isActive = true

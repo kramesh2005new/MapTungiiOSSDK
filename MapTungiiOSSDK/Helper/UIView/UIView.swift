@@ -239,6 +239,19 @@ private extension LayerPersistentHelper {
     }
 }
 
+extension UIDevice {
+    var hasNotch: Bool {
+        if #available(iOS 11.0, *) {
+            let bottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
+            return bottom > 0
+        } else {
+            // Fallback on earlier versions
+            return false
+        }
+        
+    }
+}
+
 public class VerticalAlignLabel: UILabel {
     enum VerticalAlignment {
         case top
