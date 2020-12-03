@@ -48,6 +48,12 @@ class customPopup: UIView {
         set { imgBG.image = newValue }
     }
     
+    var isKnowMoreRequired : Bool {
+        
+        get { return btnKnowMore.isHidden }
+        set { btnKnowMore.isHidden = newValue }
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         initSubviews()

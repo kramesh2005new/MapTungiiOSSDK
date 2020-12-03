@@ -36,6 +36,7 @@ struct PivotPoints : Codable {
     let deal : String?
     let currentlyhappening : String?
     let imageUrl : String?
+    let isKnowMoreRequired : Int?
 
     enum CodingKeys: String, CodingKey {
 
@@ -45,6 +46,7 @@ struct PivotPoints : Codable {
         case deal = "deal"
         case currentlyhappening = "currentlyhappening"
         case imageUrl = "imageUrl"
+        case isKnowMoreRequired = "isKnowMoreRequired"
     }
 
     init(from decoder: Decoder) throws {
@@ -55,6 +57,7 @@ struct PivotPoints : Codable {
         deal = try values.decodeIfPresent(String.self, forKey: .deal)
         currentlyhappening = try values.decodeIfPresent(String.self, forKey: .currentlyhappening)
         imageUrl = try values.decodeIfPresent(String.self, forKey: .imageUrl)
+        isKnowMoreRequired = try values.decodeIfPresent(Int.self, forKey: .isKnowMoreRequired)
     }
 
 }

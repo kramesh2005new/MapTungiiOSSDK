@@ -602,7 +602,18 @@ public class MapViewVC: ParentViewController {
         }
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(tapGestureRecognizer)
-        scrollView = UIScrollView(frame: view.bounds)
+//        if UIDevice.current.hasNotch
+//        {
+//        scrollView = UIScrollView(frame: self.view.bounds)
+        
+            scrollView = UIScrollView(frame: CGRect(x: UIApplication.shared.statusBarFrame.height
+, y: view.bounds.origin.y, width: view.bounds.size.width - UIApplication.shared.statusBarFrame.height
+, height: view.bounds.size.height ))
+//        }
+//        else
+//        {
+//            scrollView = UIScrollView(frame: CGRect(x: 20, y: view.bounds.origin.y, width: view.bounds.size.width - 20, height: view.bounds.size.height ))
+//        }
         
         if UIDevice.current.userInterfaceIdiom == .pad {
 //            scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
@@ -629,7 +640,8 @@ public class MapViewVC: ParentViewController {
         
 //        if isOrientationToggled
 //        {
-            zoomScale = self.view.bounds.size.width / self.imageView.image!.size.height;
+            zoomScale = (self.view.bounds.size.width - UIApplication.shared.statusBarFrame.height) / self.imageView.image!.size.height
+;
 //        }
 //        else
 //        {
@@ -809,11 +821,11 @@ public class MapViewVC: ParentViewController {
         btnBack.bringSubview(toFront: imageView)
         if UIDevice.current.hasNotch
         {
-            btnBack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 40).isActive = true
+            btnBack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 45).isActive = true
         }
         else
         {
-            btnBack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 16).isActive = true
+            btnBack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
         }
         btnBack.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 50).isActive = true
         btnBack.widthAnchor.constraint(equalToConstant: 40).isActive = true
@@ -857,6 +869,10 @@ public class MapViewVC: ParentViewController {
 //                scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
 //            }
             
+            scrollView.frame = CGRect(x: view.bounds.origin.x
+            , y: UIApplication.shared.statusBarFrame.height, width: view.bounds.size.width
+            , height: view.bounds.size.height - UIApplication.shared.statusBarFrame.height)
+            
             isOrientationToggled = false
         } else {
             sender.isSelected = true
@@ -866,6 +882,11 @@ public class MapViewVC: ParentViewController {
 //            if UIDevice.current.userInterfaceIdiom == .phone {
 //                scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
 //            }
+            
+            scrollView.frame = CGRect(x: UIApplication.shared.statusBarFrame.height
+            , y: view.bounds.origin.y, width: view.bounds.size.width - UIApplication.shared.statusBarFrame.height
+            , height: view.bounds.size.height )
+            
             
             isOrientationToggled = true
         }
@@ -1377,6 +1398,7 @@ public class MapViewVC: ParentViewController {
                 captionView.desc = "\(filterArray![0].currentlyhappening!)" //filterArray![0].description! + "\n\(filterArray![0].currentlyhappening!)"
                 captionView.deal = filterArray![0].deal
                 captionView.btnKnowMore.tag = sender.tag
+                captionView.isKnowMoreRequired = filterArray![0].isKnowMoreRequired == 1 ? false : true
                 captionView.btnKnowMore.addTarget(self, action: #selector(actionKnowMore), for: .touchUpInside)
                 do{
                      if (sender.tag == 2 || sender.tag == 8) //&& UIDevice.current.userInterfaceIdiom == .phone
@@ -1492,6 +1514,18 @@ public class MapViewVC: ParentViewController {
                 
                 pointY = pointY < 0 ? 0 : pointY
                 pointY = pointY > (scrollView.contentSize.height - scrollView.bounds.height) ? (scrollView.contentSize.height - scrollView.bounds.height) : pointY
+                
+//                scrollView.frame = CGRect(x: view.bounds.origin.x
+//                           , y: UIApplication.shared.statusBarFrame.height, width: view.bounds.size.width
+//                           , height: view.bounds.size.height - UIApplication.shared.statusBarFrame.height)
+                           
+//                if !isOrientationToggled
+//                {
+//                    pointX = pointX > (scrollView.contentSize.width - scrollView.bounds.width - UIApplication.shared.statusBarFrame.height) ? (scrollView.contentSize.width - scrollView.bounds.width - UIApplication.shared.statusBarFrame.height) : pointX
+//
+//                    pointY = pointY > (scrollView.contentSize.height - scrollView.bounds.height - UIApplication.shared.statusBarFrame.height) ? (scrollView.contentSize.height - scrollView.bounds.height - UIApplication.shared.statusBarFrame.height) : pointY
+//                }
+                
                 
                 scrollView.setContentOffset(CGPoint(x: pointX, y: pointY), animated: true)
                 
