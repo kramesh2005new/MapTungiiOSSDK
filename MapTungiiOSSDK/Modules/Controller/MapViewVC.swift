@@ -29,6 +29,7 @@ public class MapViewVC: ParentViewController {
     var captionView: customPopup!
     var versionNo: Int!
     var senderAction: UIButton?
+    let btnBack = UIButton()
     public static var delegate: CallbackSDK?
     public static var resortID: Int!
     
@@ -45,6 +46,10 @@ public class MapViewVC: ParentViewController {
     
     var birdTimer: Timer?
     
+    var leftConstraint: NSLayoutConstraint?
+    var topConstraint: NSLayoutConstraint?
+
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.white
@@ -52,6 +57,8 @@ public class MapViewVC: ParentViewController {
         versionNo = defaults.integer(forKey: "version")
         createFolderInDocumentDirectory()
         callAssestsWebService()
+        
+        
         //setUpStaticAssests()
         //getAnimationConfiguration()
         
@@ -108,6 +115,7 @@ public class MapViewVC: ParentViewController {
                         }){ (finished) in
                            
                             self.setUpStaticAssests()
+                            self.view.backgroundColor = UIColor(red: 197.0/255, green: 223.0/255, blue: 178.0/255, alpha: 1.0)
                             self.getAnimationConfiguration()
                             self.bgEffectToLoad = 5
                             self.getBGEffectConfiguration()
@@ -811,7 +819,7 @@ public class MapViewVC: ParentViewController {
     }
     
     func setUpBackButton(){
-        let btnBack = UIButton()
+        
         let image = UIImage(named: "back", in: Bundle(for: MapViewVC.self),       compatibleWith: nil)
         btnBack.setBackgroundImage(image, for: .normal)
         btnBack.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
@@ -821,13 +829,16 @@ public class MapViewVC: ParentViewController {
         btnBack.bringSubview(toFront: imageView)
         if UIDevice.current.hasNotch
         {
-            btnBack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 45).isActive = true
+            leftConstraint = btnBack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 45)
+            leftConstraint?.isActive = true
         }
         else
         {
-            btnBack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+            leftConstraint = btnBack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20)
+            leftConstraint?.isActive = true
         }
-        btnBack.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 50).isActive = true
+        topConstraint = btnBack.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 50)
+        topConstraint?.isActive = true
         btnBack.widthAnchor.constraint(equalToConstant: 40).isActive = true
         btnBack.heightAnchor.constraint(equalToConstant: 40).isActive = true
         setUpToggleTittle()
@@ -873,6 +884,12 @@ public class MapViewVC: ParentViewController {
             , y: UIApplication.shared.statusBarFrame.height, width: view.bounds.size.width
             , height: view.bounds.size.height - UIApplication.shared.statusBarFrame.height)
             
+            if UIDevice.current.hasNotch
+            {
+                leftConstraint?.constant = 20
+            }
+            
+            
             isOrientationToggled = false
         } else {
             sender.isSelected = true
@@ -886,6 +903,11 @@ public class MapViewVC: ParentViewController {
             scrollView.frame = CGRect(x: UIApplication.shared.statusBarFrame.height
             , y: view.bounds.origin.y, width: view.bounds.size.width - UIApplication.shared.statusBarFrame.height
             , height: view.bounds.size.height )
+            
+            if UIDevice.current.hasNotch
+            {
+                leftConstraint?.constant = 45
+            }
             
             
             isOrientationToggled = true

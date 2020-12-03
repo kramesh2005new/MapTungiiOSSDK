@@ -78,6 +78,7 @@ extension ParentViewController {
                    self.imgEntering.isHidden = false
 //                self.scrollViewStatic.isHidden = false
                 self.progressView.isHidden = false
+                self.view.backgroundColor = UIColor(red: 197.0/255, green: 223.0/255, blue: 178.0/255, alpha: 1.0)
                }
                
                DispatchQueue.main.asyncAfter(deadline: .now() ) {
