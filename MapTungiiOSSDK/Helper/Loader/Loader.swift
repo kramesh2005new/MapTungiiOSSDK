@@ -12,7 +12,8 @@ class Loader: UIView {
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var progressBar: UIView!
     
-    
+    private var rotateTimer : Timer?
+    var imgRotate : UIImageView?
     // Programatic purposs
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,27 +32,31 @@ class Loader: UIView {
         contentView.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height)
     }
     func startAnimating() {
-        let bundle = Bundle(for: Loader.self)
-        let webview = WKWebView()
-        webview.backgroundColor = .clear
-        webview.frame  = CGRect(x: 0, y: 0, width: progressBar.frame.size.width, height: progressBar.frame.size.height)
-        webview.load(URLRequest(url: bundle.url(forResource: "index", withExtension:"html")! as URL) as URLRequest)
-//        progressBar.addSubview(webview)
+        
         var arrImage: [UIImage] = []
         
         arrImage.append( UIImage(named: "Logo1", in: Bundle(for: MapViewVC.self),       compatibleWith: nil)!)
         arrImage.append( UIImage(named: "Logo2", in: Bundle(for: MapViewVC.self),       compatibleWith: nil)!)
         arrImage.append( UIImage(named: "Logo3", in: Bundle(for: MapViewVC.self),       compatibleWith: nil)!)
         arrImage.append( UIImage(named: "Logo4", in: Bundle(for: MapViewVC.self),       compatibleWith: nil)!)
-//        arrImage.append( UIImage(named: "LogoFull", in: Bundle(for: MapViewVC.self),       compatibleWith: nil)!)
         
-        let imgFull = UIImageView(frame: CGRect(x: 5, y: 5, width: progressBar.frame.size.width - 10, height: progressBar.frame.size.height - 10))
+        let imgFullBg = UIImageView(frame: CGRect(x: -12, y: -12, width: progressBar.frame.size.width + 24, height: progressBar.frame.size.height + 24))
+        imgFullBg.image = UIImage(named: "whitebackground", in: Bundle(for: MapViewVC.self),       compatibleWith: nil)
+        imgFullBg.backgroundColor = .clear
+        progressBar.addSubview(imgFullBg)
+        
+        self.imgRotate = UIImageView(frame: CGRect(x: -8, y: -8, width: progressBar.frame.size.width + 16, height: progressBar.frame.size.height + 16))
+        self.imgRotate!.image = UIImage(named: "loader", in: Bundle(for: MapViewVC.self),       compatibleWith: nil)
+        self.imgRotate!.backgroundColor = .clear
+        progressBar.addSubview(self.imgRotate!)
+        
+        let imgFull = UIImageView(frame: CGRect(x: 15, y: 15, width: progressBar.frame.size.width - 30, height: progressBar.frame.size.height - 30))
         imgFull.image = UIImage(named: "LogoFull", in: Bundle(for: MapViewVC.self),       compatibleWith: nil)
         imgFull.backgroundColor = .clear
         progressBar.addSubview(imgFull)
         
         
-        let imgLoader = UIImageView(frame: CGRect(x: 0, y: 0, width: progressBar.frame.size.width, height: progressBar.frame.size.height))
+        let imgLoader = UIImageView(frame: CGRect(x: 10, y: 10, width: progressBar.frame.size.width - 20, height: progressBar.frame.size.height - 20))
        
         imgLoader.animationImages = arrImage
         imgLoader.layer.makeAnimationsPersistent()
@@ -61,6 +66,31 @@ class Loader: UIView {
         progressBar.addSubview(imgLoader)
         self.backgroundColor = .clear
         
+        self.imgRotate?.rotate()
+        
+        self.startRotateTimer()
+    }
+    
+    func startRotateTimer()
+    {
+        self.rotateTimer =  Timer.scheduledTimer(timeInterval: 1.10, target: self, selector: #selector(self.rotateLoader), userInfo: nil, repeats: true)
+    }
+    
+    @objc func rotateLoader()
+    {
+        self.imgRotate?.rotate()
+        
+        stopRotateTimer()
+        self.rotateTimer =  Timer.scheduledTimer(timeInterval: 1.10, target: self, selector: #selector(self.rotateLoader), userInfo: nil, repeats: true)
+    }
+
+    func stopRotateTimer()
+    {
+        if self.rotateTimer != nil
+        {
+            self.rotateTimer!.invalidate()
+            self.rotateTimer = nil
+        }
     }
     
     func stopAnimating() {

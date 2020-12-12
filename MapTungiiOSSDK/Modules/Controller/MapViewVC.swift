@@ -57,21 +57,11 @@ public class MapViewVC: ParentViewController {
         versionNo = defaults.integer(forKey: "version")
         createFolderInDocumentDirectory()
         callAssestsWebService()
-        
-        
-        //setUpStaticAssests()
-        //getAnimationConfiguration()
-        
-//        if UIDevice.current.userInterfaceIdiom == .pad {
-//
-//            popupWidth = 380
-//
-//            popupHeight = 170
-//        }
+       
     }
     
     public override func viewWillAppear(_ animated: Bool) {
-//        self.edgesForExtendedLayout = []
+
     }
             
     // Create a folder in DocumentDirectory to store the files retrive from the server
@@ -138,8 +128,6 @@ public class MapViewVC: ParentViewController {
                             self.bgEffectToLoad = 4
                             self.getBGEffectConfiguration()
                             self.callPivotPointWebService()
-                            //                        self.geBirdAnimationConfiguration()
-                            //                        self.getTitleAssestConfiguration()
                             
                         }
                     }else{
@@ -157,12 +145,6 @@ public class MapViewVC: ParentViewController {
                             self.navigationController?.popViewController(animated: true)
                         }
                     }
-                    
-//                    let defaults = UserDefaults.standard
-//                    defaults.removeObject(forKey: "version")
-//                    self.versionNo = -1
-                    
-                    
                 }
                 print("\(self) retrive error on get flights: \(error)")
             }
@@ -179,12 +161,10 @@ public class MapViewVC: ParentViewController {
                 DispatchQueue.main.async {
                     self.setUpOrienttaion()
                     self.pivotResponse = items
-                    //self.getPivotPointConfiguration()
+                   
                     self.geBirdAnimationConfiguration()
                     self.getTitleAssestConfiguration()
-                    self.progressView.progress = 1.0
-                    self.progressView.isHidden = true
-                    self.progressView.removeFromSuperview()
+                    self.stopAnimate()
                     let defaults = UserDefaults.standard
                     defaults.set(self.assetsResponse.data?.version, forKey: "version")
                     
@@ -204,29 +184,29 @@ public class MapViewVC: ParentViewController {
         self.geBirdAnimationConfiguration()
     }
     
+    //This method to download ans load Map background
     func downloadAndLoadMapBg()
     {
         let fileName : String = "map_bg.png"
         
-         var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         documentsURL.appendPathComponent(fileName)
         try? FileManager.default.removeItem(at: documentsURL)
         let url = URL(string: (self.assetsResponse?.data?.staticMapAssets?.filter{$0.assetName == "map_bg"}.first?.assetUrl!)!)
         
         let request = URLRequest(url:url!)
-        //self.startAnimate()
+        
         assetsApiModel.downloadAssets(parent: self, from:"Static", downloadURL: request, { (result) in
             switch result {
             case .success(let items):
                 do {
-                try FileManager.default.copyItem(at: items, to: documentsURL)
-                DispatchQueue.main.async {
-                    self.downloadAndLoadMapHouse()
-//                    self.setUpStaticAssests()
-                   //self.callDownloadAnimationAssets()
+                    try FileManager.default.copyItem(at: items, to: documentsURL)
+                    DispatchQueue.main.async {
+                        self.downloadAndLoadMapHouse()
+                        
                     }}catch (let writeError) {
-                print("Error creating a file \(documentsURL) : \(writeError)")
-            }
+                        print("Error creating a file \(documentsURL) : \(writeError)")
+                }
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.showAlertWithTitle(title: "Oops!", message: "Something went wrong"){
@@ -239,10 +219,9 @@ public class MapViewVC: ParentViewController {
                 print("\(self) retrive error on get flights: \(error)")
             }
         })
-        
-        
     }
     
+    //This method to download ans load Houses in the Map
     func downloadAndLoadMapHouse()
     {
         let fileName : String = "map_houses.png"
@@ -261,9 +240,8 @@ public class MapViewVC: ParentViewController {
                 try FileManager.default.copyItem(at: items, to: documentsURL)
                 DispatchQueue.main.async {
                     self.setUpStaticAssests()
-                    self.progressView.progress = 0.10
                     self.callDownloadBGEffects1()
-                   //self.callDownloadAnimationAssets()
+                   
                     }}catch (let writeError) {
                 print("Error creating a file \(documentsURL) : \(writeError)")
             }
@@ -290,7 +268,7 @@ public class MapViewVC: ParentViewController {
         var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         documentsURL.appendPathComponent("Static_BG.zip")
         try? FileManager.default.removeItem(at: documentsURL)
-//        let url = URL(string: (self.assetsResponse?.data?.staticMapAssets?[0].assetUrl!)!)
+        
         let url = URL(string: (self.assetsResponse?.data?.staticMapAssets?.filter{$0.assetName == "Static_BG"}.first?.assetUrl!)!)
         let request = URLRequest(url:url!)
         
@@ -298,17 +276,16 @@ public class MapViewVC: ParentViewController {
             switch result {
             case .success(let items):
                 do {
-                try FileManager.default.copyItem(at: items, to: documentsURL)
-                DispatchQueue.main.async {
-                   self.unZipAssets(filePath : documentsURL, from: "Static")
-                    self.getStaicAssestConfiguration()
-                    self.progressView.progress = 0.70
-                    self.bgEffectToLoad = 2
-                    self.callDownloadBGEffects()
-//                   self.callDownloadAnimationAssets()
+                    try FileManager.default.copyItem(at: items, to: documentsURL)
+                    DispatchQueue.main.async {
+                        self.unZipAssets(filePath : documentsURL, from: "Static")
+                        self.getStaicAssestConfiguration()
+                        self.bgEffectToLoad = 2
+                        self.callDownloadBGEffects()
+                        
                     }}catch (let writeError) {
-                print("Error creating a file \(documentsURL) : \(writeError)")
-            }
+                        print("Error creating a file \(documentsURL) : \(writeError)")
+                }
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.showAlertWithTitle(title: "Oops!", message: "Something went wrong"){
@@ -373,7 +350,7 @@ public class MapViewVC: ParentViewController {
                 DispatchQueue.main.async {
                    self.unZipAssets(filePath : documentsURL, from: "Animation")
                     self.getAnimationConfiguration()
-                    self.progressView.progress = 0.15
+                    
                     self.bgEffectToLoad = 5
                     self.callDownloadBGEffects()
                     }}catch (let writeError) {
@@ -398,7 +375,7 @@ public class MapViewVC: ParentViewController {
              var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
              documentsURL.appendPathComponent("BG_Effects_\(bgEffectToLoad).zip")
              try? FileManager.default.removeItem(at: documentsURL)
-    //         let url = URL(string: (self.assetsResponse?.data?.animationAssets![0].assetUrl!)!)
+    
              let url = URL(string: (self.assetsResponse?.data?.animationAssets?.filter{$0.assetname == "BG_Effects_\(bgEffectToLoad)"}.first?.assetUrl!)!)
              let request = URLRequest(url:url!)
             
@@ -412,7 +389,6 @@ public class MapViewVC: ParentViewController {
                         self.getBGEffectConfiguration()
                         if self.bgEffectToLoad == 5
                         {
-                            self.progressView.progress = 0.20
                             self.callDownloadTreeBunchEffects()
                         }
                         else if self.bgEffectToLoad < 4
@@ -422,19 +398,11 @@ public class MapViewVC: ParentViewController {
                         }
                         else if self.bgEffectToLoad == 4
                         {
-                            self.progressView.progress = 0.85
-                            self.callDownloadTungiPopupImages()
                             
+                            self.callDownloadTungiPopupImages()
                         }
                         
-                        if self.bgEffectToLoad == 3
-                        {
-                            self.progressView.progress = 0.80
-                        }
-                        else if self.bgEffectToLoad == 2
-                        {
-                            self.progressView.progress = 0.80
-                        }
+                       
                         
                         }}catch (let writeError) {
                     print("Error creating a file \(documentsURL) : \(writeError)")
@@ -458,7 +426,7 @@ public class MapViewVC: ParentViewController {
              var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
              documentsURL.appendPathComponent("Tree_Bunch_\(treeBunchEffectToLoad).zip")
              try? FileManager.default.removeItem(at: documentsURL)
-    //         let url = URL(string: (self.assetsResponse?.data?.animationAssets![0].assetUrl!)!)
+    
              let url = URL(string: (self.assetsResponse?.data?.animationAssets?.filter{$0.assetname == "Tree_Bunch_\(treeBunchEffectToLoad)"}.first?.assetUrl!)!)
              let request = URLRequest(url:url!)
             
@@ -471,13 +439,9 @@ public class MapViewVC: ParentViewController {
                        self.unZipAssets(filePath : documentsURL, from: "Animation")
                         self.getTreeBunchConfiguration()
                         
-                        if self.treeBunchEffectToLoad == 2
-                        {
-                            self.progressView.progress = 0.30
-                        }
+                        
                          if self.treeBunchEffectToLoad == 3
                          {
-                            self.progressView.progress = 0.40
                             self.hideStaticMap()
                             
                         }
@@ -488,13 +452,11 @@ public class MapViewVC: ParentViewController {
                         }
                         else if self.treeBunchEffectToLoad == 4
                         {
-                            self.progressView.progress = 0.50
                             self.treeBunchEffectToLoad += 2
                             self.callDownloadTreeBunchEffects()
                         }
                         else if self.treeBunchEffectToLoad == 6
                         {
-                            self.progressView.progress = 0.60
                             self.setUpStaticHouseAssests()
                             self.callDownloadStaticAssets()
                         }
@@ -521,7 +483,7 @@ public class MapViewVC: ParentViewController {
              var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
              documentsURL.appendPathComponent("Tungi_Popup_Images.zip")
              try? FileManager.default.removeItem(at: documentsURL)
-    //         let url = URL(string: (self.assetsResponse?.data?.animationAssets![0].assetUrl!)!)
+    
              let url = URL(string: (self.assetsResponse?.data?.animationAssets?.filter{$0.assetname == "Tungi_Popup_images"}.first?.assetUrl!)!)
              let request = URLRequest(url:url!)
             
@@ -532,7 +494,7 @@ public class MapViewVC: ParentViewController {
                     try FileManager.default.copyItem(at: items, to: documentsURL)
                     DispatchQueue.main.async {
                        self.unZipAssets(filePath : documentsURL, from: "Animation")
-                        self.progressView.progress = 0.95
+                        
                         self.callPivotPointWebService()
                         }}catch (let writeError) {
                     print("Error creating a file \(documentsURL) : \(writeError)")
@@ -559,16 +521,12 @@ public class MapViewVC: ParentViewController {
         do {
             var documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             documentsDirectory = documentsDirectory.appendingPathComponent(folderName)
-//            let fileURL = URL(fileURLWithPath: documentsDirectory.absoluteString)
+
             try? FileManager.default.removeItem(at: documentsDirectory)
             try Zip.unzipFile(filePath, destination: documentsDirectory, overwrite: true, password: "password", progress: { (progress) -> () in
             }) // Unzip
             if from == "Static" {
                 
-            }else{
-                //setUpStaticAssests()
-//                getAnimationConfiguration()
-                //callPivotPointWebService()
             }
         }
         catch {
@@ -576,13 +534,13 @@ public class MapViewVC: ParentViewController {
         }
     }
     
+    //This method to setup static House assets
     func setUpStaticHouseAssests(){
         
         do{
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             
             let houseURL = documentsURL.appendingPathComponent("map_houses.png")
-            //            let housefileURLs = URL(fileURLWithPath: houseURL.absoluteString)
             let houseimage = UIImage(data: try Foundation.Data(contentsOf: houseURL))
                 imageHouse = UIImageView(image: houseimage)
             }catch{
@@ -598,11 +556,11 @@ public class MapViewVC: ParentViewController {
         do{
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             let mapURL = documentsURL.appendingPathComponent("map_bg.png")
-            //let mapfileURLs = URL(fileURLWithPath: mapURL.absoluteString)
+            
             let mapimage = UIImage(data: try Foundation.Data(contentsOf: mapURL))
             imageView = UIImageView(image: mapimage)
             let houseURL = documentsURL.appendingPathComponent("map_houses.png")
-//            let housefileURLs = URL(fileURLWithPath: houseURL.absoluteString)
+            
             let houseimage = UIImage(data: try Foundation.Data(contentsOf: houseURL))
             imageHouse = UIImageView(image: houseimage)
         }catch{
@@ -610,65 +568,43 @@ public class MapViewVC: ParentViewController {
         }
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(tapGestureRecognizer)
-//        if UIDevice.current.hasNotch
-//        {
-//        scrollView = UIScrollView(frame: self.view.bounds)
         
-            scrollView = UIScrollView(frame: CGRect(x: UIApplication.shared.statusBarFrame.height
-, y: view.bounds.origin.y, width: view.bounds.size.width - UIApplication.shared.statusBarFrame.height
-, height: view.bounds.size.height ))
-//        }
-//        else
-//        {
-//            scrollView = UIScrollView(frame: CGRect(x: 20, y: view.bounds.origin.y, width: view.bounds.size.width - 20, height: view.bounds.size.height ))
-//        }
+        scrollView = UIScrollView(frame: CGRect(x: UIApplication.shared.statusBarFrame.height
+            , y: view.bounds.origin.y, width: view.bounds.size.width - UIApplication.shared.statusBarFrame.height
+            , height: view.bounds.size.height ))
+        
         
         if UIDevice.current.userInterfaceIdiom == .pad {
-//            scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
+            
             scrollView.contentSize = imageView.bounds.size
             scrollView.setContentOffset(
                 CGPoint(x: scrollView.contentSize.width - scrollView.bounds.size.width, y: scrollView.contentSize.height - scrollView.bounds.size.height),
-            animated: true)
+                animated: true)
         }else{
-//            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            
             scrollView.contentSize = imageView.bounds.size
             scrollView.setContentOffset(
                 CGPoint(x: scrollView.contentSize.width - scrollView.bounds.size.width, y: scrollView.contentSize.height - scrollView.bounds.size.height),
-            animated: true)
+                animated: true)
         }
         
         self.scrollView.translatesAutoresizingMaskIntoConstraints = false;
         scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleBottomMargin, .flexibleTopMargin, .flexibleRightMargin, .flexibleLeftMargin]
         scrollView.delegate = self
         
-//        let widthScale = self.view.bounds.size.width / imageView.bounds.width
-//           let heightScale = self.view.bounds.size.height / imageView.bounds.height
-//           let scale = min(widthScale,heightScale)
-//           scrollView.minimumZoomScale = scale
         
-//        if isOrientationToggled
-//        {
-            zoomScale = (self.view.bounds.size.width - UIApplication.shared.statusBarFrame.height) / self.imageView.image!.size.height
-;
-//        }
-//        else
-//        {
-//            zoomScale = self.view.bounds.size.height / self.imageView.image!.size.height;
-//        }
-
-//        if (zoomScale > 1) {
-//            self.scrollView.minimumZoomScale = 1;
-//            zoomScale = 1
-//        }
-
+        zoomScale = (self.view.bounds.size.width - UIApplication.shared.statusBarFrame.height) / self.imageView.image!.size.height
+        ;
+        
+        
         self.scrollView.minimumZoomScale = zoomScale;
         
         self.currentZoomScale = zoomScale
-//        scrollView.minimumZoomScale = 1
+        
         scrollView.maximumZoomScale = 2.0
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
-        //imageView.addSubview(imageHouse)
+        
         scrollView.addSubview(imageView)
         view.addSubview(scrollView)
         view.sendSubview(toBack: scrollView)
@@ -678,33 +614,12 @@ public class MapViewVC: ParentViewController {
         scrollView.isDirectionalLockEnabled = false
         scrollView.bouncesZoom = false
         scrollView.bounces = false
-        //scrollView.isScrollEnabled = false
+        
         if #available(iOS 11.0, *) {
             scrollView.contentInsetAdjustmentBehavior = .never
         } else {
             automaticallyAdjustsScrollViewInsets = false
         }
-        
-//        let longGesture = UILongPressGestureRecognizer.init(target: self, action: #selector(handleLongPress(_:)))
-//        longGesture.minimumPressDuration = 0.0
-//        longGesture.delaysTouchesBegan = false
-//        longGesture.delegate = self
-//        scrollView.addGestureRecognizer(longGesture)
-        
-        
-//        let panGesture = UIPanGestureRecognizer.init(target: self, action: #selector(handlePanGesture(_:)))
-//        panGesture.delegate = self // <--THIS
-//        panGesture.cancelsTouchesInView = false;
-//        panGesture.delaysTouchesBegan = false;
-//        panGesture.delaysTouchesEnded = false;
-//        scrollView.addGestureRecognizer(panGesture)
-        
-
-        
-//        if UIDevice.current.userInterfaceIdiom == .pad {
-//            scrollView.zoomScale = 1.1
-//        }
-      //  setUpOrienttaion()
         
     }
     
@@ -736,15 +651,13 @@ public class MapViewVC: ParentViewController {
                 
                 pointX = pointX < 0 ? 0 : pointX
                 pointX = pointX > (scrollView.contentSize.width - scrollView.bounds.width) ? ((scrollView.contentSize.width) - scrollView.bounds.width) : pointX
-            
+                
                 pointY = pointY < 0 ? 0 : pointY
                 pointY = pointY > (scrollView.contentSize.height - scrollView.bounds.height) ? (scrollView.contentSize.height - scrollView.bounds.height) : pointY
                 
                 scrollView.setContentOffset(CGPoint(x: pointX, y:  pointY), animated: true)
                 
             }
-            
-//            self.startLocation = sender.location(in: imageView)
             
         }
         else if sender.state == UIGestureRecognizerState.ended {
@@ -762,19 +675,14 @@ public class MapViewVC: ParentViewController {
                 
                 pointX = pointX < 0 ? 0 : pointX
                 pointX = pointX > (scrollView.contentSize.width - scrollView.bounds.width) ? ((scrollView.contentSize.width) - scrollView.bounds.width) : pointX
-            
+                
                 pointY = pointY < 0 ? 0 : pointY
                 pointY = pointY > (scrollView.contentSize.height - scrollView.bounds.height) ? (scrollView.contentSize.height - scrollView.bounds.height) : pointY
                 
                 scrollView.setContentOffset(CGPoint(x: pointX, y:  pointY), animated: true)
                 
             }
-            
-            
         }
-
-        
-        
     }
     
    
@@ -876,9 +784,6 @@ public class MapViewVC: ParentViewController {
             self.view.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi*2))
             self.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.height, height: self.view.bounds.size.width)
             sender.isSelected = false
-//            if UIDevice.current.userInterfaceIdiom == .phone {
-//                scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
-//            }
             
             scrollView.frame = CGRect(x: view.bounds.origin.x
             , y: UIApplication.shared.statusBarFrame.height, width: view.bounds.size.width
@@ -896,9 +801,6 @@ public class MapViewVC: ParentViewController {
             print(CGFloat(-Double.pi/2))
             self.view.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/2))
             self.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height)
-//            if UIDevice.current.userInterfaceIdiom == .phone {
-//                scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
-//            }
             
             scrollView.frame = CGRect(x: UIApplication.shared.statusBarFrame.height
             , y: view.bounds.origin.y, width: view.bounds.size.width - UIApplication.shared.statusBarFrame.height
@@ -908,12 +810,8 @@ public class MapViewVC: ParentViewController {
             {
                 leftConstraint?.constant = 45
             }
-            
-            
             isOrientationToggled = true
         }
-        
-        
     }
     
     @objc func actionToggleTapped(sender: UIButton) {
@@ -1167,11 +1065,6 @@ public class MapViewVC: ParentViewController {
         imageView.addSubview(pivotView)
         pivotView.frame = CGRect(x: item.xPosition!, y: item.yPosition!, width: item.width!, height: item.height!)
         
-//        let btnPivot = UIButton()
-//        btnPivot.frame = CGRect(x: item.btnxPosition!, y: item.btnyPosition!, width: item.btnwidth!, height: item.btnheight!)
-//        btnPivot.tag = item.id!
-//        btnPivot.addTarget(self, action: #selector(actionAssestsTapped), for: .touchUpInside)
-//        imageView.addSubview(btnPivot)
     }
     
     func setEffectsAssest (item: Bgeffects, folderName: String){
@@ -1276,6 +1169,7 @@ public class MapViewVC: ParentViewController {
         }
     }
     
+    //This method while scroll view did zoom adjust the pop up size
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
         
         if scrollView == scrollViewStatic
@@ -1285,29 +1179,11 @@ public class MapViewVC: ParentViewController {
         
         let scale = scrollView.zoomScale
         
-        //let statHeight = UIApplication.shared.statusBarFrame.height * -1
-        
-//        if scale > zoomScale  //&& UIDevice.current.userInterfaceIdiom == .phone
-//        {
-//            scrollView.contentInset = UIEdgeInsets(top: statHeight, left: 0, bottom: 0, right: 0)
-//        }
-//        else
-//        {
-//            if isOrientationToggled // && UIDevice.current.userInterfaceIdiom == .phone
-//            {
-//                scrollView.contentInset = UIEdgeInsets(top: statHeight, left: 0, bottom: 0, right: 0)
-//            }
-//            else
-//            {
-//                scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//            }
-//        }
-        
         self.currentZoomScale = scale
         
         if self.captionView != nil
         {
-                
+            
             self.captionView.transform = CGAffineTransform(scaleX: 1.0/scale, y: 1.0/scale)
             
             var yPosition = senderAction!.frame.origin.y - self.captionView.frame.size.height
@@ -1329,42 +1205,14 @@ public class MapViewVC: ParentViewController {
             {
                 let xPosition = (senderAction!.frame.origin.x + senderAction!.frame.size.width) - self.captionView.frame.size.width
                 
-                 captionView.frame = CGRect(x: xPosition, y: yPosition, width: self.captionView.frame.size.width, height: self.captionView.frame.size.height)
+                captionView.frame = CGRect(x: xPosition, y: yPosition, width: self.captionView.frame.size.width, height: self.captionView.frame.size.height)
             }
         }
-        
-//        if UIDevice.current.userInterfaceIdiom == .phone
-//        {
-//            if zoomScale < currentZoomScale
-//            {
-//                scrollView.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
-//            }
-//            else if zoomScale + 0.2 <= currentZoomScale || zoomScale == currentZoomScale
-//            {
-//                scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//            }
-//        }
-        
-//        let subView : UIView = self.imageView;
-//        let offsetX : CGFloat = (scrollView.bounds.size.width > scrollView.contentSize.width) ?
-//           (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
-//
-//        let  offsetY : CGFloat = (scrollView.bounds.size.height > scrollView.contentSize.height) ?
-//           (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
-//
-//        subView.center = CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX,
-//                                 y: scrollView.contentSize.height * 0.5 + offsetY);
-        
     }
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         
-        
-        
-        
     }
-    
-    
     
     //UIbutton event for the assests.
     @objc func actionAssestsTapped(sender: UIButton) {
@@ -1381,28 +1229,25 @@ public class MapViewVC: ParentViewController {
         if ((self.pivotResponse?.data?.pivotPoints) != nil) {
             let filterArray = self.pivotResponse!.data?.pivotPoints!.filter() { $0.pivotId == String(sender.tag) }
             if filterArray!.count > 0 {
-//                if sender.tag == 2 {
-//                    captionView = customPopup(frame: CGRect(x: sender.frame.origin.x-175, y: sender.frame.origin.y-170, width: 360, height: 180))
-//                }else{
-                  //  captionView = customPopup(frame: CGRect(x: (sender.frame.origin.x ) - ((130 * self.currentZoomScale) * (1.0/self.currentZoomScale)) , y: (sender.frame.origin.y) - ((220 * self.currentZoomScale) * (1.0/self.currentZoomScale)), width: 360, height: 180))
-                    
+                
+                
                 if sender.tag == 1 || sender.tag == 9 || sender.tag == 10 || sender.tag == 11 {
                     
                     if sender.tag == 10
                     {
                         let xPosition = (senderAction!.frame.origin.x + senderAction!.frame.size.width) - (popupWidth * 1/currentZoomScale)
                         
-                         captionView = customPopup(frame: CGRect(x: xPosition, y: sender.frame.origin.y + (sender.frame.size.height ), width: popupWidth, height: popupHeight))
+                        captionView = customPopup(frame: CGRect(x: xPosition, y: sender.frame.origin.y + (sender.frame.size.height ), width: popupWidth, height: popupHeight))
                     }
                     else
                     {
-                         captionView = customPopup(frame: CGRect(x: sender.frame.origin.x-((popupWidth/2) - (sender.frame.size.width / 2)), y: sender.frame.origin.y + (sender.frame.size.height ), width: popupWidth, height: popupHeight))
+                        captionView = customPopup(frame: CGRect(x: sender.frame.origin.x-((popupWidth/2) - (sender.frame.size.width / 2)), y: sender.frame.origin.y + (sender.frame.size.height ), width: popupWidth, height: popupHeight))
                     }
-                   
+                    
                 }
                 else if (sender.tag == 2 || sender.tag == 8) //&& UIDevice.current.userInterfaceIdiom == .phone
                 {
-                   
+                    
                     let xPosition = (senderAction!.frame.origin.x + senderAction!.frame.size.width) - (popupWidth * 1/currentZoomScale)
                     
                     captionView = customPopup(frame: CGRect(x: xPosition, y: sender.frame.origin.y-popupHeight, width: popupWidth, height: popupHeight))
@@ -1412,19 +1257,16 @@ public class MapViewVC: ParentViewController {
                     captionView = customPopup(frame: CGRect(x: sender.frame.origin.x-((popupWidth / 2) - (sender.frame.size.width / 2)), y: sender.frame.origin.y-popupHeight, width: popupWidth, height: popupHeight))
                 }
                 
-                   
-//                }
-                
                 
                 captionView.caption = filterArray![0].heading
-                captionView.desc = "\(filterArray![0].currentlyhappening!)" //filterArray![0].description! + "\n\(filterArray![0].currentlyhappening!)"
+                captionView.desc = "\(filterArray![0].currentlyhappening!)"
                 captionView.deal = filterArray![0].deal
                 captionView.btnKnowMore.tag = sender.tag
                 captionView.isKnowMoreRequired = filterArray![0].isKnowMoreRequired == 1 ? false : true
                 captionView.btnKnowMore.addTarget(self, action: #selector(actionKnowMore), for: .touchUpInside)
                 do{
-                     if (sender.tag == 2 || sender.tag == 8) //&& UIDevice.current.userInterfaceIdiom == .phone
-                     {
+                    if (sender.tag == 2 || sender.tag == 8)
+                    {
                         documentsURL.appendPathComponent("popup_background_right.png")
                     }
                     else if sender.tag == 10
@@ -1435,7 +1277,7 @@ public class MapViewVC: ParentViewController {
                     {
                         documentsURL.appendPathComponent("popup_background_centre.png")
                     }
-                    //let imageURL = URL(fileURLWithPath: documentsURL.absoluteString)
+                    
                     let image = UIImage(data: try Foundation.Data(contentsOf: documentsURL))
                     
                     if sender.tag == 1 || sender.tag == 9 || sender.tag == 10 || sender.tag == 11 {
@@ -1493,13 +1335,13 @@ public class MapViewVC: ParentViewController {
                     let image = UIImage(data: try Foundation.Data(contentsOf: iocnsURL))
                     captionView.icon = image
                 }catch{ print("Error while enumerating files \(iocnsURL.path): \(error.localizedDescription)")}
-        
-               
+                
+                
                 
                 imageView.addSubview(captionView)
                 
                 var transform =  CGAffineTransform.identity
-                transform = transform.scaledBy(x: 1.0/self.currentZoomScale, y: 1.0/self.currentZoomScale) //CGAffineTransform(scaleX: 1.0/self.currentZoomScale, y: 1.0/self.currentZoomScale)
+                transform = transform.scaledBy(x: 1.0/self.currentZoomScale, y: 1.0/self.currentZoomScale) 
                 transform = transform.translatedBy(x: 0, y: 0)
                 
                 self.captionView.transform = transform
@@ -1523,68 +1365,24 @@ public class MapViewVC: ParentViewController {
                 {
                     let xPosition = (senderAction!.frame.origin.x + senderAction!.frame.size.width) - self.captionView.frame.size.width
                     
-                     captionView.frame = CGRect(x: xPosition, y: yPosition, width: self.captionView.frame.size.width, height: self.captionView.frame.size.height)
+                    captionView.frame = CGRect(x: xPosition, y: yPosition, width: self.captionView.frame.size.width, height: self.captionView.frame.size.height)
                 }
                 
                 let scale =  1.0/self.currentZoomScale
                 
                 var pointX = (captionView.center.x - (((popupWidth * scale)/2) + 50)) * currentZoomScale
                 var pointY = (captionView.center.y - (((popupHeight * scale)/2) + 50)) * currentZoomScale //scrollView.contentOffset.y
-                    
+                
                 pointX = pointX < 0 ? 0 : pointX
                 pointX = pointX > (scrollView.contentSize.width - scrollView.bounds.width) ? ((scrollView.contentSize.width) - scrollView.bounds.width) : pointX
                 
                 pointY = pointY < 0 ? 0 : pointY
                 pointY = pointY > (scrollView.contentSize.height - scrollView.bounds.height) ? (scrollView.contentSize.height - scrollView.bounds.height) : pointY
                 
-//                scrollView.frame = CGRect(x: view.bounds.origin.x
-//                           , y: UIApplication.shared.statusBarFrame.height, width: view.bounds.size.width
-//                           , height: view.bounds.size.height - UIApplication.shared.statusBarFrame.height)
-                           
-//                if !isOrientationToggled
-//                {
-//                    pointX = pointX > (scrollView.contentSize.width - scrollView.bounds.width - UIApplication.shared.statusBarFrame.height) ? (scrollView.contentSize.width - scrollView.bounds.width - UIApplication.shared.statusBarFrame.height) : pointX
-//
-//                    pointY = pointY > (scrollView.contentSize.height - scrollView.bounds.height - UIApplication.shared.statusBarFrame.height) ? (scrollView.contentSize.height - scrollView.bounds.height - UIApplication.shared.statusBarFrame.height) : pointY
-//                }
-                
                 
                 scrollView.setContentOffset(CGPoint(x: pointX, y: pointY), animated: true)
                 
-//                if UIDevice.current.userInterfaceIdiom == .phone {
-//                    let offsetSize = captionView.center.x * currentZoomScale
-//
-//                    var  imgWidth = scrollView.contentSize.width * currentZoomScale
-//
-//                    if !isOrientationToggled
-//                    {
-//                        if offsetSize < imgWidth
-//                        {
-//
-//                            scrollView.setContentOffset(CGPoint(x: captionView.center.x * currentZoomScale, y: scrollView.contentOffset.y), animated: true)
-//                        }
-//                        else
-//                        {
-//                            scrollView.setContentOffset(CGPoint(x: scrollView.contentSize.width * currentZoomScale, y: scrollView.contentOffset.y), animated: true)
-//                        }
-//                    }
-//                    else
-//                    {
-//                        imgWidth = scrollView.contentSize.height * currentZoomScale
-//
-//                        if offsetSize < imgWidth
-//                        {
-//
-//                            scrollView.setContentOffset(CGPoint(x: captionView.center.x * currentZoomScale, y: scrollView.contentOffset.y), animated: true)
-//                        }
-//                        else
-//                        {
-//                            scrollView.setContentOffset(CGPoint(x: scrollView.contentSize.height * currentZoomScale, y: scrollView.contentOffset.y), animated: true)
-//                        }
-//                    }
-//                }
                 
-//                self.scrollView.zoom(toPoint: CGPoint(x: captionView.frame.origin.x , y: captionView.frame.origin.y) , scale: currentZoomScale, animated: true)
             }
         }
     }
